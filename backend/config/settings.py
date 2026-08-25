@@ -12,18 +12,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # =========================================================
 
-SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
-    "django-insecure-local-development-key",
-)
-
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
-
+SECRET_KEY = "mlW5cqpNce401PggNreUWGUGZFrD_A-Ab43gy4z2oxspSdVJ5fB_KP3UJezKO_bg568"
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-    if host.strip()
+    "loda2007.pythonanywhere.com",
 ]
 
 
@@ -196,12 +189,7 @@ REST_FRAMEWORK = {
 # =========================================================
 
 CORS_ALLOWED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv(
-        "CORS_ALLOWED_ORIGINS",
-        "http://localhost:5173",
-    ).split(",")
-    if origin.strip()
+    "http://localhost:5173",
 ]
 
 
