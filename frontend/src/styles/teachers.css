@@ -1,0 +1,528 @@
+/* =========================================================
+   TEACHERS PAGE
+========================================================= */
+
+.teachers-page {
+    min-height: 100vh;
+    padding: 40px;
+    background: #f5f7fb;
+    color: #172033;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.teachers-header {
+    max-width: 1250px;
+    margin: 0 auto 30px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.teachers-header span {
+    display: block;
+    margin-bottom: 7px;
+
+    color: #7c3aed;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.teachers-header h1 {
+    margin: 0;
+
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.7px;
+}
+
+.teachers-header p {
+    margin: 8px 0 0;
+
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.teachers-back-button {
+    padding: 11px 17px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+
+    background: white;
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.teachers-back-button:hover {
+    border-color: #d1d5db;
+    background: #fafafa;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.teachers-stats {
+    max-width: 1250px;
+    margin: 0 auto 25px;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.teacher-stat-card {
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    border: 1px solid #e8ebf0;
+    border-radius: 14px;
+
+    background: white;
+
+    box-shadow:
+        0 5px 20px rgba(15, 23, 42, 0.04);
+}
+
+.teacher-stat-icon {
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #f5f3ff;
+    color: #7c3aed;
+
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.teacher-stat-card span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #8b93a3;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.teacher-stat-card strong {
+    display: block;
+
+    color: #172033;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.teachers-card {
+    max-width: 1250px;
+    margin: 0 auto;
+
+    overflow: hidden;
+
+    border: 1px solid #e8ebf0;
+    border-radius: 16px;
+
+    background: white;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.teachers-card-header {
+    padding: 23px 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+.teachers-card-header h2 {
+    margin: 0;
+
+    font-size: 19px;
+    font-weight: 750;
+}
+
+.teachers-card-header p {
+    margin: 5px 0 0;
+
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.teachers-search {
+    width: 300px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 0 13px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+
+    background: #fafbfc;
+}
+
+.teachers-search span {
+    font-size: 14px;
+}
+
+.teachers-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #172033;
+    font-size: 12px;
+}
+
+.teachers-search input::placeholder {
+    color: #a0a6b1;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.teachers-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.teachers-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 850px;
+}
+
+.teachers-table th {
+    padding: 14px 20px;
+
+    text-align: left;
+
+    background: #fafbfc;
+
+    border-bottom: 1px solid #edf0f4;
+
+    color: #8b93a3;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.teachers-table td {
+    padding: 17px 20px;
+
+    border-bottom: 1px solid #f0f2f5;
+
+    color: #374151;
+
+    font-size: 13px;
+}
+
+.teachers-table tbody tr {
+    transition: 0.15s ease;
+}
+
+.teachers-table tbody tr:hover {
+    background: #fafbff;
+}
+
+.teachers-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   TEACHER USER
+========================================================= */
+
+.teacher-user {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.teacher-avatar {
+    width: 39px;
+    height: 39px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #ede9fe;
+    color: #7c3aed;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.teacher-user strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #172033;
+    font-size: 13px;
+}
+
+.teacher-user span {
+    display: block;
+
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.teacher-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 9px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.teacher-status i {
+    width: 6px;
+    height: 6px;
+
+    display: block;
+
+    border-radius: 50%;
+}
+
+.teacher-status.active {
+    background: #ecfdf3;
+    color: #15803d;
+}
+
+.teacher-status.active i {
+    background: #22c55e;
+}
+
+.teacher-status.inactive {
+    background: #fff1f2;
+    color: #be123c;
+}
+
+.teacher-status.inactive i {
+    background: #f43f5e;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.teacher-view-button {
+    padding: 8px 13px;
+
+    border: 1px solid #ddd6fe;
+    border-radius: 8px;
+
+    background: #f5f3ff;
+    color: #7c3aed;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.teacher-view-button:hover {
+    background: #ede9fe;
+
+    border-color: #c4b5fd;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.teachers-empty {
+    padding: 70px 20px;
+
+    text-align: center;
+}
+
+.teachers-empty > div {
+    margin-bottom: 12px;
+
+    font-size: 35px;
+}
+
+.teachers-empty h3 {
+    margin: 0 0 5px;
+
+    font-size: 16px;
+}
+
+.teachers-empty p {
+    margin: 0;
+
+    color: #9ca3af;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+
+.teachers-loading,
+.teachers-error {
+    min-height: 70vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    color: #6b7280;
+}
+
+.teachers-error h3 {
+    margin: 0;
+
+    color: #be123c;
+}
+
+.teachers-error p {
+    margin: 0;
+
+    font-size: 13px;
+}
+
+.teachers-error button {
+    margin-top: 8px;
+
+    padding: 9px 15px;
+
+    border: 1px solid #fecdd3;
+    border-radius: 8px;
+
+    background: #fff1f2;
+    color: #be123c;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .teachers-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .teachers-page {
+        padding: 25px 15px;
+    }
+
+    .teachers-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .teachers-header h1 {
+        font-size: 28px;
+    }
+
+    .teachers-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .teachers-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .teachers-search {
+        width: 100%;
+    }
+
+}

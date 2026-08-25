@@ -1,0 +1,201 @@
+.edit-lesson-page {
+    min-height: 100vh;
+    padding: 40px;
+    background: #f6f7fb;
+    color: #17181c;
+}
+
+.edit-lesson-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.edit-lesson-back {
+    margin-bottom: 28px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.edit-lesson-back:hover {
+    color: #17181c;
+}
+
+.edit-lesson-header {
+    margin-bottom: 28px;
+}
+
+.edit-lesson-header span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #888;
+}
+
+.edit-lesson-header h1 {
+    margin: 8px 0;
+    font-size: 32px;
+}
+
+.edit-lesson-header p {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+}
+
+.edit-lesson-form {
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #e7e7ec;
+    border-radius: 18px;
+}
+
+.form-group,
+.file-section {
+    margin-bottom: 22px;
+}
+
+.form-group label,
+.file-section > label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group textarea,
+.file-section input[type="file"] {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid #dedee5;
+    border-radius: 10px;
+    background: #fff;
+    font-family: inherit;
+    outline: none;
+}
+
+.form-group input {
+    height: 46px;
+    padding: 12px 14px;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    padding: 12px 14px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #999;
+}
+
+.file-section input[type="file"] {
+    padding: 10px;
+    background: #fafafa;
+}
+
+.file-section input[type="file"]::file-selector-button {
+    margin-right: 10px;
+    padding: 8px 12px;
+    border: 1px solid #dddde4;
+    border-radius: 7px;
+    background: #fff;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.current-file {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.current-file:hover {
+    text-decoration: underline;
+}
+
+.no-file {
+    margin: 0 0 10px;
+    color: #999;
+    font-size: 13px;
+}
+
+.publish-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0 25px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.publish-toggle input {
+    width: 17px;
+    height: 17px;
+}
+
+.edit-lesson-submit {
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #17181c;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.edit-lesson-submit:hover {
+    opacity: 0.88;
+}
+
+.edit-lesson-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.edit-lesson-error {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border: 1px solid #f0d3d3;
+    border-radius: 10px;
+    background: #fff5f5;
+    color: #a33;
+    font-size: 13px;
+}
+
+.edit-lesson-loading {
+    padding: 100px 20px;
+    text-align: center;
+    color: #777;
+}
+
+@media (max-width: 700px) {
+
+    .edit-lesson-page {
+        padding: 20px;
+    }
+
+    .edit-lesson-form {
+        padding: 22px;
+    }
+
+    .edit-lesson-header h1 {
+        font-size: 27px;
+    }
+}

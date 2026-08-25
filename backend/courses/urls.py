@@ -1,0 +1,176 @@
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path(
+        "",
+        CourseListView.as_view(),
+        name="course-list",
+    ),
+    path(
+        "<int:pk>/",
+        CourseDetailView.as_view(),
+        name="course-detail",
+    ),
+    path(
+        "lessons/<int:pk>/",
+        LessonDetailView.as_view(),
+        name="lesson-detail",
+    ),
+    path(
+        "enroll/<int:course_id>/",
+        EnrollCourseView.as_view(),
+        name="course-enroll",
+    ),
+    path(
+        "lessons/<int:lesson_id>/complete/",
+        CompleteLessonView.as_view(),
+        name="complete-lesson",
+    ),
+
+    path(
+        "exams/<int:exam_id>/submit/",
+        SubmitExamView.as_view(),
+        name="submit-exam",
+    ),
+    path(
+        "dashboard/",
+        StudentDashboardView.as_view(),
+        name="student-dashboard",
+    ),
+    path(
+        "exam-results/",
+        StudentExamResultsView.as_view(),
+        name="student-exam-results",
+    ),
+    path(
+        "wallet/transactions/",
+        StudentWalletTransactionsView.as_view(),
+        name="wallet-transactions",
+    ),
+    path(
+        "teacher/dashboard/",
+        TeacherDashboardView.as_view(),
+        name="teacher-dashboard",
+    ),
+    path(
+        "exams/<int:pk>/",
+        ExamDetailView.as_view(),
+        name="exam-detail",
+    ),
+    path(
+        "exam-analysis/<int:attempt_id>/",
+        StudentExamAnalysisView.as_view(),
+        name="student-exam-analysis",
+    ),
+    path(
+        "teacher/courses/",
+        TeacherCourseListCreateView.as_view(),
+        name="teacher-course-list-create",
+    ),
+
+    path(
+        "teacher/courses/<int:pk>/",
+        TeacherCourseDetailView.as_view(),
+        name="teacher-course-detail",
+    ),
+    path(
+        "teacher/courses/<int:pk>/",
+        TeacherCourseDetailView.as_view(),
+        name="teacher-course-detail",
+    ),
+    path(
+        "teacher/lessons/",
+        TeacherLessonListCreateView.as_view(),
+        name="teacher-lesson-list-create",
+    ),
+
+    path(
+        "teacher/lessons/<int:pk>/",
+        TeacherLessonDetailView.as_view(),
+        name="teacher-lesson-detail",
+    ),
+    path(
+        "teacher/exams/create/",
+        TeacherCreateExamView.as_view(),
+        name="teacher-create-exam",
+    ),
+    path(
+        "teacher/exams/<int:exam_id>/questions/",
+        TeacherExamQuestionsView.as_view(),
+        name="teacher-exam-questions",
+    ),
+
+    path(
+        "teacher/exams/questions/create/",
+        TeacherCreateExamQuestionView.as_view(),
+        name="teacher-create-question",
+    ),
+
+    path(
+        "teacher/questions/<int:pk>/",
+        TeacherExamQuestionDetailView.as_view(),
+        name="teacher-question-detail",
+    ),
+
+    
+    path(
+        "teacher/lessons/<int:lesson_id>/exam/",
+        TeacherExamManagementView.as_view(),
+        name="teacher-exam-management",
+    ),
+    path(
+        "admin/dashboard/",
+        AdminDashboardView.as_view(),
+        name="admin-dashboard",
+    ),
+
+    path(
+        "admin/students/",
+        AdminStudentListView.as_view(),
+        name="admin-students",
+    ),
+    path(
+        "admin/students/<int:pk>/",
+        AdminStudentDetailView.as_view(),
+        name="admin-student-detail",
+    ),
+    path(
+        "admin/teachers/",
+        AdminTeachersView.as_view(),
+        name="admin-teachers",
+    ),
+    path(
+        "admin/teachers/<int:pk>/",
+        AdminTeacherDetailView.as_view(),
+        name="admin-teacher-detail",
+    ),
+    path(
+        "admin/courses/<int:pk>/",
+        AdminCourseDetailView.as_view(),
+        name="admin-course-detail",
+    ),
+    path(
+        "admin/courses/",
+        AdminCoursesView.as_view(),
+        name="admin-courses",
+    ),
+
+    path(
+        "student/courses/",
+        StudentAllCoursesView.as_view(),
+        name="student-all-courses",
+    ),
+    path(
+        "student/courses/<int:course_id>/enroll/",
+        StudentEnrollCourseView.as_view(),
+        name="student-enroll-course",
+    ),
+    path(
+        "teacher/courses/<int:course_id>/students/",
+        TeacherCourseStudentsView.as_view(),
+        name="teacher-course-students",
+    ),
+
+
+]

@@ -1,0 +1,217 @@
+.create-lesson-page {
+    min-height: 100vh;
+    padding: 40px;
+    background: #f6f7fb;
+    color: #17181c;
+}
+
+.create-lesson-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Back */
+
+.create-lesson-back {
+    margin-bottom: 28px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.create-lesson-back:hover {
+    color: #17181c;
+}
+
+
+/* Header */
+
+.create-lesson-header {
+    margin-bottom: 28px;
+}
+
+.create-lesson-header span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #888;
+}
+
+.create-lesson-header h1 {
+    margin: 8px 0;
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+.create-lesson-header p {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* Error */
+
+.create-lesson-error {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border: 1px solid #f0d3d3;
+    border-radius: 10px;
+    background: #fff5f5;
+    color: #a33;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* Form */
+
+.create-lesson-form {
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #e7e7ec;
+    border-radius: 18px;
+}
+
+
+/* Form Group */
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #dedee5;
+    border-radius: 10px;
+    outline: none;
+    background: #fff;
+    color: #17181c;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input {
+    height: 46px;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #999;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #aaa;
+}
+
+
+/* File Inputs */
+
+.form-group input[type="file"] {
+    height: auto;
+    padding: 10px;
+    cursor: pointer;
+    background: #fafafa;
+}
+
+.form-group input[type="file"]::file-selector-button {
+    margin-right: 10px;
+    padding: 8px 12px;
+    border: 1px solid #dddde4;
+    border-radius: 7px;
+    background: #fff;
+    color: #333;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+/* Publish */
+
+.publish-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0 25px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.publish-toggle input {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    cursor: pointer;
+}
+
+
+/* Submit */
+
+.create-lesson-submit {
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #17181c;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.create-lesson-submit:hover {
+    opacity: 0.88;
+}
+
+.create-lesson-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .create-lesson-page {
+        padding: 20px;
+    }
+
+    .create-lesson-header h1 {
+        font-size: 27px;
+    }
+
+    .create-lesson-form {
+        padding: 22px;
+        border-radius: 14px;
+    }
+}

@@ -1,0 +1,693 @@
+/* =========================================================
+   STUDENT DETAILS PAGE
+========================================================= */
+
+.student-details-page {
+    min-height: 100vh;
+    padding: 40px;
+
+    background: #f5f7fb;
+    color: #172033;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.student-details-header {
+    max-width: 1200px;
+    margin: 0 auto 35px;
+
+    position: relative;
+}
+
+.student-details-back {
+    margin-bottom: 25px;
+
+    padding: 10px 16px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.student-details-back:hover {
+    background: #fafafa;
+
+    border-color: #d1d5db;
+
+    transform: translateX(-2px);
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.student-profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+}
+
+.student-profile-avatar {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 18px;
+
+    background: #ede9fe;
+
+    color: #7c3aed;
+
+    font-size: 25px;
+
+    font-weight: 800;
+}
+
+.student-profile span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8b5cf6;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.student-profile h1 {
+    margin: 0;
+
+    font-size: 34px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.7px;
+}
+
+.student-profile p {
+    margin: 6px 0 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.student-details-status {
+    position: absolute;
+
+    right: 0;
+    bottom: 5px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.student-details-status.active {
+    background: #ecfdf3;
+
+    color: #15803d;
+}
+
+.student-details-status.inactive {
+    background: #fff1f2;
+
+    color: #be123c;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.student-section {
+    max-width: 1200px;
+
+    margin: 0 auto 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf0;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.student-section-header {
+    padding: 24px 26px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+.student-section-header span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8b5cf6;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+}
+
+.student-section-header h2 {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 21px;
+
+    font-weight: 750;
+}
+
+.student-section-header > strong {
+    min-width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #f5f3ff;
+
+    color: #7c3aed;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   COURSES GRID
+========================================================= */
+
+.student-courses-grid {
+    padding: 25px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   COURSE CARD
+========================================================= */
+
+.student-course-card {
+    padding: 22px;
+
+    border: 1px solid #edf0f4;
+
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    transition: 0.2s ease;
+}
+
+.student-course-card:hover {
+    border-color: #ddd6fe;
+
+    box-shadow:
+        0 8px 22px rgba(124, 58, 237, 0.07);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   COURSE TOP
+========================================================= */
+
+.student-course-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin-bottom: 25px;
+}
+
+.student-course-icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background: #f5f3ff;
+
+    color: #7c3aed;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+.student-course-top h3 {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+.student-course-top p {
+    margin: 5px 0 0;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.student-progress-info {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 9px;
+}
+
+.student-progress-info span {
+    color: #6b7280;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.student-progress-info strong {
+    color: #172033;
+
+    font-size: 13px;
+}
+
+.student-progress-bar {
+    width: 100%;
+    height: 8px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #eef0f4;
+}
+
+.student-progress-bar div {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: #8b5cf6;
+
+    transition: width 0.4s ease;
+}
+
+
+/* =========================================================
+   COURSE FOOTER
+========================================================= */
+
+.student-course-footer {
+    margin-top: 12px;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   EXAM LIST
+========================================================= */
+
+.student-exams-list {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   EXAM ROW
+========================================================= */
+
+.student-exam-row {
+    padding: 20px 26px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid #f0f2f5;
+
+    transition: background 0.15s ease;
+}
+
+.student-exam-row:hover {
+    background: #fafbff;
+}
+
+.student-exam-row:last-child {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   EXAM INFO
+========================================================= */
+
+.student-exam-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 0;
+}
+
+.student-exam-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #f5f3ff;
+
+    color: #7c3aed;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+.student-exam-info h3 {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.student-exam-info p {
+    margin: 5px 0 0;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   EXAM RESULT
+========================================================= */
+
+.student-exam-result {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    flex-shrink: 0;
+}
+
+.student-exam-result strong {
+    min-width: 55px;
+
+    text-align: right;
+
+    color: #172033;
+
+    font-size: 17px;
+
+    font-weight: 800;
+}
+
+.student-exam-result span {
+    min-width: 68px;
+
+    padding: 6px 9px;
+
+    text-align: center;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
+.student-exam-result .passed {
+    background: #ecfdf3;
+
+    color: #15803d;
+}
+
+.student-exam-result .failed {
+    background: #fff1f2;
+
+    color: #be123c;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.student-empty {
+    padding: 60px 20px;
+
+    text-align: center;
+
+    color: #9ca3af;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.student-details-loading {
+    min-height: 70vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.student-details-error {
+    min-height: 70vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    color: #be123c;
+
+    font-size: 14px;
+}
+
+.student-details-error button {
+    padding: 10px 16px;
+
+    border: 1px solid #fecdd3;
+
+    border-radius: 9px;
+
+    background: #fff1f2;
+
+    color: #be123c;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .student-details-page {
+        padding: 25px 16px;
+    }
+
+    .student-courses-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-details-status {
+        position: static;
+
+        margin-top: 18px;
+    }
+
+    .student-profile {
+        align-items: flex-start;
+    }
+
+    .student-profile h1 {
+        font-size: 28px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .student-details-header {
+        margin-bottom: 25px;
+    }
+
+    .student-profile-avatar {
+        width: 58px;
+        height: 58px;
+
+        border-radius: 14px;
+
+        font-size: 21px;
+    }
+
+    .student-profile h1 {
+        font-size: 24px;
+    }
+
+    .student-section-header {
+        padding: 20px;
+    }
+
+    .student-courses-grid {
+        padding: 16px;
+    }
+
+    .student-exam-row {
+        padding: 18px 20px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .student-exam-result {
+        width: 100%;
+
+        justify-content: flex-end;
+    }
+
+}

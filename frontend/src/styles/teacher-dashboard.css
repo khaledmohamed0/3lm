@@ -1,0 +1,408 @@
+.teacher-page {
+    min-height: 100vh;
+    padding: 40px;
+    background: #f6f7fb;
+    color: #17181c;
+}
+
+
+/* =========================
+   Header
+========================= */
+
+.teacher-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 35px;
+}
+
+.teacher-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #777;
+}
+
+.teacher-header h1 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.teacher-header p {
+    margin: 10px 0 0;
+    color: #777;
+    font-size: 15px;
+}
+
+.teacher-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    background: #fff;
+    border: 1px solid #e8e8ed;
+    border-radius: 14px;
+}
+
+.teacher-avatar {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #17181c;
+    color: #fff;
+    font-weight: 700;
+}
+
+.teacher-profile strong,
+.teacher-profile span {
+    display: block;
+}
+
+.teacher-profile strong {
+    font-size: 14px;
+}
+
+.teacher-profile span {
+    margin-top: 3px;
+    font-size: 12px;
+    color: #888;
+}
+
+
+/* =========================
+   Stats
+========================= */
+
+.teacher-stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 45px;
+}
+
+.teacher-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e8e8ed;
+    border-radius: 16px;
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #f1f2f5;
+    font-size: 20px;
+}
+
+.teacher-stat-card span:not(.stat-icon) {
+    display: block;
+    margin-bottom: 5px;
+    color: #888;
+    font-size: 12px;
+}
+
+.teacher-stat-card strong {
+    font-size: 24px;
+}
+
+
+/* =========================
+   Section
+========================= */
+
+.teacher-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.teacher-section-header > div > span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #888;
+}
+
+.teacher-section-header h2 {
+    margin: 6px 0;
+    font-size: 26px;
+}
+
+.teacher-section-header p {
+    margin: 0;
+    color: #888;
+}
+
+.create-course-button,
+.teacher-empty button {
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 18px;
+    background: #17181c;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.create-course-button:hover,
+.teacher-empty button:hover {
+    opacity: 0.9;
+}
+
+
+/* =========================
+   Course Grid
+========================= */
+
+.teacher-course-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.teacher-course-card {
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e8e8ed;
+    border-radius: 18px;
+}
+
+.course-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 10px;
+}
+
+.course-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: #f1f2f5;
+    font-size: 22px;
+}
+
+.course-status {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.course-status.published {
+    background: #eaf7ee;
+    color: #26743b;
+}
+
+.course-status.draft {
+    background: #f3f3f3;
+    color: #777;
+}
+
+.course-card-body {
+    padding: 10px 20px 20px;
+}
+
+.course-card-body h3 {
+    margin: 0 0 8px;
+    font-size: 19px;
+}
+
+.course-card-body p {
+    margin: 0;
+    min-height: 42px;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================
+   Course Stats
+========================= */
+
+.course-card-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.course-card-stats div {
+    padding: 14px;
+    text-align: center;
+}
+
+.course-card-stats div + div {
+    border-left: 1px solid #eee;
+}
+
+.course-card-stats span,
+.course-card-stats strong {
+    display: block;
+}
+
+.course-card-stats span {
+    margin-bottom: 4px;
+    color: #888;
+    font-size: 11px;
+}
+
+.course-card-stats strong {
+    font-size: 14px;
+}
+
+
+/* =========================
+   Actions
+========================= */
+
+.course-card-actions {
+    display: flex;
+    gap: 10px;
+    padding: 16px 20px;
+}
+
+.course-card-actions button {
+    flex: 1;
+    border: 0;
+    border-radius: 9px;
+    padding: 10px;
+    background: #17181c;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.course-card-actions button.secondary {
+    background: #f1f2f5;
+    color: #17181c;
+}
+
+
+/* =========================
+   Empty
+========================= */
+
+.teacher-empty {
+    padding: 70px 20px;
+    text-align: center;
+    background: #fff;
+    border: 1px dashed #d9d9df;
+    border-radius: 18px;
+}
+
+.teacher-empty > div {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.teacher-empty h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.teacher-empty p {
+    margin: 0 0 20px;
+    color: #888;
+}
+
+
+/* =========================
+   Loading / Error
+========================= */
+
+.teacher-loading,
+.teacher-error {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.teacher-error {
+    flex-direction: column;
+}
+
+.teacher-error h2 {
+    margin-bottom: 8px;
+}
+
+.teacher-error p {
+    color: #777;
+}
+
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 1100px) {
+
+    .teacher-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .teacher-course-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .teacher-page {
+        padding: 20px;
+    }
+
+    .teacher-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .teacher-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .teacher-course-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+
+@media (max-width: 450px) {
+
+    .teacher-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-header h1 {
+        font-size: 27px;
+    }
+}

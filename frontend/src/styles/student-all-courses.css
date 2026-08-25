@@ -1,0 +1,724 @@
+
+.student-all-courses-page {
+    min-height: 100vh;
+    padding: 40px;
+
+    background: #f5f7fb;
+    color: #172033;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.student-courses-header {
+    max-width: 1250px;
+    margin: 0 auto 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf0;
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.05);
+}
+
+.student-courses-header span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #7c3aed;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+}
+
+.student-courses-header h1 {
+    margin: 0 0 7px;
+
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.student-courses-header p {
+    margin: 0;
+
+    color: #8b93a3;
+
+    font-size: 12px;
+}
+
+
+.student-courses-total {
+    min-width: 110px;
+
+    padding: 16px 22px;
+
+    border-radius: 13px;
+
+    background: #faf8ff;
+
+    text-align: center;
+}
+
+.student-courses-total strong {
+    display: block;
+
+    color: #7c3aed;
+
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.student-courses-total span {
+    margin: 3px 0 0;
+
+    color: #9ca3af;
+
+    font-size: 9px;
+
+    letter-spacing: 0;
+}
+
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.student-courses-toolbar {
+    max-width: 1250px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding: 15px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf0;
+    border-radius: 14px;
+}
+
+
+.student-courses-search {
+    flex: 1;
+
+    max-width: 480px;
+
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 14px;
+
+    background: #fafbfc;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.student-courses-search span {
+    font-size: 13px;
+}
+
+.student-courses-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #374151;
+
+    font-size: 11px;
+}
+
+.student-courses-search input::placeholder {
+    color: #a1a8b3;
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.student-courses-filters {
+    display: flex;
+
+    gap: 6px;
+}
+
+.student-courses-filters button {
+    padding: 9px 15px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #6b7280;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.student-courses-filters button:hover {
+    background: #faf8ff;
+
+    border-color: #ddd6fe;
+
+    color: #7c3aed;
+}
+
+.student-courses-filters button.active {
+    background: #7c3aed;
+
+    border-color: #7c3aed;
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   RESULT COUNT
+========================= */
+
+.student-courses-results {
+    max-width: 1250px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+
+    gap: 5px;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+}
+
+.student-courses-results strong {
+    color: #374151;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.student-courses-grid {
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.student-course-card {
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf0;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 6px 25px rgba(15, 23, 42, 0.04);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+.student-course-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 35px rgba(15, 23, 42, 0.09);
+}
+
+
+/* =========================
+   COURSE COVER
+========================= */
+
+.student-course-cover {
+    height: 145px;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5f3ff,
+            #ede9fe
+        );
+
+    border-bottom: 1px solid #eee;
+}
+
+.student-course-cover-icon {
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    font-size: 29px;
+
+    box-shadow:
+        0 8px 20px rgba(124, 58, 237, 0.12);
+}
+
+
+/* ENROLLED */
+
+.student-enrolled-badge {
+    position: absolute;
+
+    top: 12px;
+    right: 12px;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: #ecfdf3;
+
+    color: #15803d;
+
+    font-size: 8px;
+    font-weight: 800;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.student-course-content {
+    padding: 20px;
+}
+
+.student-course-content h2 {
+    margin: 0 0 7px;
+
+    color: #172033;
+
+    font-size: 17px;
+    font-weight: 800;
+
+    line-height: 1.35;
+}
+
+.student-course-description {
+    min-height: 38px;
+
+    margin: 0 0 16px;
+
+    color: #8b93a3;
+
+    font-size: 10px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================
+   TEACHER
+========================= */
+
+.student-course-teacher {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px;
+
+    background: #fafbfc;
+
+    border-radius: 10px;
+}
+
+.student-teacher-avatar {
+    width: 31px;
+    height: 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #ede9fe;
+
+    color: #7c3aed;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.student-course-teacher span {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #9ca3af;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: .7px;
+}
+
+.student-course-teacher strong {
+    color: #374151;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   META
+========================= */
+
+.student-course-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin: 15px 0;
+
+    padding: 12px 0;
+
+    border-top: 1px solid #f0f2f5;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.student-course-meta span {
+    color: #7b8494;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.student-course-button {
+    width: 100%;
+
+    padding: 11px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #7c3aed;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.student-course-button:hover {
+    background: #6d28d9;
+
+    transform: translateY(-1px);
+}
+
+.student-course-button.enrolled {
+    background: #172033;
+}
+
+.student-course-button.enrolled:hover {
+    background: #111827;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.student-courses-empty {
+    max-width: 1250px;
+
+    min-height: 300px;
+
+    margin: 20px auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    background: #ffffff;
+
+    border: 1px dashed #dfe3e8;
+
+    border-radius: 16px;
+
+    text-align: center;
+}
+
+.student-courses-empty-icon {
+    margin-bottom: 10px;
+
+    font-size: 32px;
+}
+
+.student-courses-empty h2 {
+    margin: 0 0 6px;
+
+    color: #374151;
+
+    font-size: 16px;
+}
+
+.student-courses-empty p {
+    margin: 0 0 15px;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+}
+
+.student-courses-empty button {
+    padding: 9px 14px;
+
+    border: 1px solid #ddd6fe;
+
+    border-radius: 8px;
+
+    background: #faf8ff;
+
+    color: #7c3aed;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.student-courses-loading {
+    min-height: 70vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f5f7fb;
+}
+
+.student-courses-loader {
+    padding: 20px 25px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf0;
+
+    border-radius: 12px;
+
+    color: #7c3aed;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.student-courses-error {
+    min-height: 70vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f5f7fb;
+}
+
+.student-courses-error-card {
+    width: min(400px, 90%);
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf0;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.05);
+}
+
+.student-courses-error-icon {
+    width: 40px;
+    height: 40px;
+
+    margin: 0 auto 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #fff1f2;
+
+    color: #be123c;
+
+    font-weight: 800;
+}
+
+.student-courses-error-card h2 {
+    margin: 0 0 7px;
+
+    color: #374151;
+
+    font-size: 16px;
+}
+
+.student-courses-error-card p {
+    margin: 0 0 16px;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+}
+
+.student-courses-error-card button {
+    padding: 9px 15px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #7c3aed;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1050px) {
+
+    .student-courses-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 720px) {
+
+    .student-all-courses-page {
+        padding: 20px 15px;
+    }
+
+    .student-courses-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 18px;
+    }
+
+    .student-courses-toolbar {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .student-courses-search {
+        max-width: none;
+    }
+
+    .student-courses-filters {
+        width: 100%;
+    }
+
+    .student-courses-filters button {
+        flex: 1;
+    }
+
+    .student-courses-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+

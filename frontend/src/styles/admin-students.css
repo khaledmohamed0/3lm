@@ -1,0 +1,456 @@
+/* =========================================================
+   ADMIN STUDENTS PAGE
+========================================================= */
+
+.admin-students-page {
+    min-height: 100vh;
+    padding: 40px;
+    background: #f5f7fb;
+    color: #172033;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.admin-students-header {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.admin-students-header span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+
+    color: #6b7280;
+}
+
+.admin-students-header h1 {
+    margin: 0;
+
+    font-size: 36px;
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+}
+
+.admin-students-header p {
+    margin: 8px 0 0;
+
+    color: #6b7280;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.admin-back-button {
+    border: 1px solid #e5e7eb;
+
+    background: white;
+
+    color: #374151;
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.admin-back-button:hover {
+    background: #f9fafb;
+
+    border-color: #d1d5db;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.admin-students-toolbar {
+    max-width: 1200px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.admin-students-toolbar input {
+    width: 100%;
+    max-width: 430px;
+
+    height: 46px;
+
+    padding: 0 16px;
+
+    border: 1px solid #e1e5eb;
+
+    border-radius: 11px;
+
+    background: white;
+
+    color: #172033;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+.admin-students-toolbar input::placeholder {
+    color: #9ca3af;
+}
+
+.admin-students-toolbar input:focus {
+    border-color: #8b5cf6;
+
+    box-shadow:
+        0 0 0 3px rgba(139, 92, 246, 0.08);
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.admin-students-error {
+    max-width: 1200px;
+
+    margin: 0 auto 20px;
+
+    padding: 14px 16px;
+
+    border-radius: 10px;
+
+    background: #fff1f2;
+
+    border: 1px solid #fecdd3;
+
+    color: #be123c;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.admin-students-card {
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    background: white;
+
+    border: 1px solid #e8ebf0;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.admin-students-card-header {
+    padding: 24px 26px;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+.admin-students-card-header span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.3px;
+
+    color: #8b5cf6;
+}
+
+.admin-students-card-header h2 {
+    margin: 0;
+
+    font-size: 21px;
+
+    font-weight: 750;
+
+    color: #172033;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.admin-students-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.admin-students-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 700px;
+}
+
+.admin-students-table thead {
+    background: #fafbfc;
+}
+
+.admin-students-table th {
+    padding: 15px 24px;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+
+    color: #6b7280;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+.admin-students-table td {
+    padding: 18px 24px;
+
+    border-bottom: 1px solid #f0f2f5;
+
+    font-size: 14px;
+
+    color: #4b5563;
+}
+
+.admin-students-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.admin-students-table tbody tr:hover {
+    background: #fafbff;
+}
+
+.admin-students-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   STUDENT NAME
+========================================================= */
+
+.student-name {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.student-avatar {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #f0ebff;
+
+    color: #7c3aed;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.student-name strong {
+    color: #172033;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.student-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.student-status.active {
+    background: #ecfdf3;
+
+    color: #15803d;
+}
+
+.student-status.inactive {
+    background: #fff1f2;
+
+    color: #be123c;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.student-view-button {
+    padding: 8px 14px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #6d28d9;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.student-view-button:hover {
+    background: #f5f3ff;
+
+    border-color: #ddd6fe;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.admin-students-loading {
+    padding: 70px 20px;
+
+    text-align: center;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.admin-students-empty {
+    padding: 70px 20px;
+
+    text-align: center;
+
+    color: #9ca3af;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .admin-students-page {
+        padding: 25px 16px;
+    }
+
+    .admin-students-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .admin-students-header h1 {
+        font-size: 30px;
+    }
+
+    .admin-back-button {
+        width: 100%;
+    }
+
+    .admin-students-toolbar input {
+        max-width: none;
+    }
+
+    .admin-students-card-header {
+        padding: 20px;
+    }
+
+    .admin-students-table th,
+    .admin-students-table td {
+        padding: 14px 18px;
+    }
+
+}

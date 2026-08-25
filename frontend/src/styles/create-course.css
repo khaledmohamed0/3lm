@@ -1,0 +1,340 @@
+.create-course-page {
+    min-height: 100vh;
+    padding: 40px;
+    background: #f6f7fb;
+    color: #17181c;
+}
+
+.create-course-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.create-course-back {
+    margin-bottom: 30px;
+    border: 0;
+    background: transparent;
+    color: #666;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.create-course-back:hover {
+    color: #17181c;
+}
+
+
+/* Header */
+
+.create-course-header {
+    margin-bottom: 30px;
+}
+
+.create-course-header > span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #888;
+}
+
+.create-course-header h1 {
+    margin: 8px 0;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.create-course-header p {
+    margin: 0;
+    color: #777;
+}
+
+
+/* Error */
+
+.create-course-error {
+    margin-bottom: 20px;
+    padding: 15px 18px;
+    white-space: pre-line;
+    background: #fff1f1;
+    border: 1px solid #f0caca;
+    border-radius: 12px;
+    color: #a33;
+    font-size: 14px;
+}
+
+
+/* Form */
+
+.create-course-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-section {
+    padding: 28px;
+    background: #fff;
+    border: 1px solid #e7e7ec;
+    border-radius: 18px;
+}
+
+.form-section-title {
+    margin-bottom: 25px;
+}
+
+.form-section-title > span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    color: #888;
+}
+
+.form-section-title h2 {
+    margin: 6px 0 0;
+    font-size: 20px;
+}
+
+
+/* Form Group */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #dddde4;
+    border-radius: 10px;
+    background: #fff;
+    color: #17181c;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #17181c;
+}
+
+
+/* Price */
+
+.price-input {
+    position: relative;
+}
+
+.price-input input {
+    padding-right: 55px;
+}
+
+.price-input span {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* Thumbnail */
+
+.thumbnail-upload input {
+    display: none;
+}
+
+.thumbnail-upload label {
+    min-height: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 2px dashed #d8d8df;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.thumbnail-upload label:hover {
+    border-color: #999;
+    background: #fafafa;
+}
+
+.upload-icon {
+    font-size: 34px;
+}
+
+.thumbnail-upload strong {
+    font-size: 14px;
+}
+
+.thumbnail-upload span {
+    color: #999;
+    font-size: 12px;
+}
+
+
+/* Publish */
+
+.publish-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.publish-row > div > span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    color: #888;
+}
+
+.publish-row h2 {
+    margin: 6px 0;
+    font-size: 18px;
+}
+
+.publish-row p {
+    margin: 0;
+    color: #888;
+    font-size: 13px;
+}
+
+
+/* Switch */
+
+.switch {
+    position: relative;
+    width: 52px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    background: #d6d6dc;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 4px;
+    top: 4px;
+    border-radius: 50%;
+    background: white;
+    transition: 0.2s;
+}
+
+.switch input:checked + .slider {
+    background: #17181c;
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(22px);
+}
+
+
+/* Actions */
+
+.create-course-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-bottom: 30px;
+}
+
+.cancel-button,
+.create-button {
+    padding: 13px 22px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cancel-button {
+    border: 1px solid #dddde4;
+    background: #fff;
+    color: #555;
+}
+
+.create-button {
+    border: 0;
+    background: #17181c;
+    color: #fff;
+}
+
+.create-button:hover {
+    opacity: 0.9;
+}
+
+.create-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .create-course-page {
+        padding: 20px;
+    }
+
+    .create-course-header h1 {
+        font-size: 28px;
+    }
+
+    .form-section {
+        padding: 20px;
+    }
+
+    .publish-row {
+        align-items: flex-start;
+    }
+
+    .create-course-actions {
+        flex-direction: column-reverse;
+    }
+
+    .cancel-button,
+    .create-button {
+        width: 100%;
+    }
+}

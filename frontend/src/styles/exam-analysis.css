@@ -1,0 +1,475 @@
+/* =========================================
+   EXAM ANALYSIS
+========================================= */
+
+.analysis-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.analysis-header {
+    margin-bottom: 30px;
+}
+
+.analysis-header>span {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.analysis-header h1 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.2;
+}
+
+.analysis-header p {
+    margin: 10px 0 0;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+
+/* =========================================
+   SCORE CARD
+========================================= */
+
+.analysis-score-card {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+
+    background: #e5e7eb;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.analysis-score-card>div {
+    background: #ffffff;
+    padding: 28px 24px;
+}
+
+.analysis-score-card span {
+    display: block;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+
+.analysis-score-card strong {
+    display: block;
+
+    font-size: 30px;
+    font-weight: 800;
+
+    color: #111827;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.analysis-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+
+    margin-bottom: 50px;
+}
+
+.analysis-stat {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    padding: 22px 24px;
+
+    box-sizing: border-box;
+}
+
+.analysis-stat span {
+    display: block;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    color: #9ca3af;
+
+    margin-bottom: 8px;
+}
+
+.analysis-stat strong {
+    font-size: 28px;
+    font-weight: 800;
+
+    color: #111827;
+}
+
+
+/* =========================================
+   WRONG ANSWERS SECTION
+========================================= */
+
+.wrong-answers-section {
+    margin-top: 10px;
+}
+
+.section-header {
+    margin-bottom: 24px;
+}
+
+.section-header>span {
+    display: block;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+
+    color: #9ca3af;
+
+    margin-bottom: 8px;
+}
+
+.section-header h2 {
+    margin: 0;
+
+    font-size: 25px;
+    font-weight: 800;
+
+    color: #111827;
+}
+
+.section-header p {
+    margin: 8px 0 0;
+
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   WRONG ANSWERS LIST
+========================================= */
+
+.wrong-answers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.wrong-answer-card {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.wrong-answer-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+
+/* Question number */
+
+.question-number {
+    display: inline-block;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+
+    color: #6b7280;
+
+    margin-bottom: 12px;
+}
+
+
+/* Question */
+
+.wrong-answer-card h3 {
+    margin: 0 0 22px;
+
+    font-size: 17px;
+    line-height: 1.6;
+
+    font-weight: 700;
+
+    color: #111827;
+}
+
+
+/* =========================================
+   ANSWERS
+========================================= */
+
+.answer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 14px 16px;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+
+    box-sizing: border-box;
+}
+
+.answer-row span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.answer-row strong {
+    font-size: 14px;
+    font-weight: 800;
+}
+
+
+/* Wrong */
+
+.answer-row.wrong {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+.answer-row.wrong span,
+.answer-row.wrong strong {
+    color: #dc2626;
+}
+
+
+/* Correct */
+
+.answer-row.correct {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+}
+
+.answer-row.correct span,
+.answer-row.correct strong {
+    color: #16a34a;
+}
+
+
+/* =========================================
+   PERFECT RESULT
+========================================= */
+
+.perfect-result {
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+
+    padding: 50px 30px;
+
+    margin-top: 20px;
+}
+
+.perfect-result>div {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.perfect-result h3 {
+    margin: 0;
+
+    font-size: 22px;
+    font-weight: 800;
+
+    color: #111827;
+}
+
+.perfect-result p {
+    margin: 8px 0 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.analysis-back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 40px;
+
+    padding: 12px 20px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.analysis-back-button:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.analysis-loading {
+    min-height: 300px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #6b7280;
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.analysis-error {
+    max-width: 600px;
+
+    margin: 80px auto;
+
+    padding: 35px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #fecaca;
+    border-radius: 16px;
+}
+
+.analysis-error h2 {
+    margin: 0 0 10px;
+
+    color: #b91c1c;
+
+    font-size: 22px;
+}
+
+.analysis-error p {
+    margin: 0 0 24px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+.analysis-error button {
+    padding: 11px 18px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #111827;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .analysis-page {
+        padding: 25px 16px 45px;
+    }
+
+    .analysis-header h1 {
+        font-size: 27px;
+    }
+
+    .analysis-score-card {
+        grid-template-columns: 1fr;
+    }
+
+    .analysis-score-card>div {
+        padding: 20px;
+    }
+
+    .analysis-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .wrong-answer-card {
+        padding: 18px;
+    }
+
+    .answer-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}
