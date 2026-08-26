@@ -4,6 +4,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from django.db import transaction
+from django.conf import settings
 from decimal import Decimal
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -11,6 +12,11 @@ from rest_framework import status
 from django.db.models import Count, Q
 from django.contrib.auth import get_user_model
 from accounts.models import User
+from .services import (
+    is_lesson_unlocked,
+    create_bunny_video,
+    create_bunny_upload_signature,
+)
 from .models import (
     Course,
     Lesson,
@@ -33,7 +39,7 @@ from .serializers import (
 
     
 )
-from .services import is_lesson_unlocked
+
 
 class CourseListView(generics.ListAPIView):
     queryset = Course.objects.filter(is_published=True)
@@ -833,6 +839,8 @@ class TeacherCourseDetailView(
         return Course.objects.filter(
             teacher=self.request.user
         )
+
+
 class TeacherLessonListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = LessonSerializer
@@ -1996,4 +2004,74 @@ class TeacherCourseStudentsView(
                 "students":
                     students,
             }
+        )
+
+class TeacherLessonVideoUploadView(
+    generics.GenericAPIView
+):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, lesson_id):
+
+        if request.user.role != "TEACHER":
+            raise PermissionDenied(
+                "Only teachers can upload videos."
+            )
+
+        lesson = get_object_or_404(
+            Lesson,
+            id=lesson_id,
+            course__teacher=request.user,
+        )
+
+        title = request.data.get("title")
+
+        if not title:
+            return Response(
+                {
+                    "detail": "Video title is required."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Create video object in Bunny
+        bunny_video = create_bunny_video(title)
+
+        video_id = bunny_video["guid"]
+
+        # Generate temporary TUS signature
+        upload_data = create_bunny_upload_signature(
+            video_id
+        )
+
+        # Save Bunny video ID in our DB
+        lesson.bunny_video_id = video_id
+        lesson.video_url = (
+            f"https://iframe.mediadelivery.net/embed/"
+            f"{settings.BUNNY_LIBRARY_ID}/"
+            f"{video_id}"
+        )
+
+        lesson.save(
+            update_fields=[
+                "bunny_video_id",
+                "video_url",
+            ]
+        )
+
+        return Response(
+            {
+                "message": "Bunny video created successfully.",
+
+                "lesson_id": lesson.id,
+
+                "video": {
+                    "id": video_id,
+                    "title": title,
+                },
+
+                "upload": upload_data,
+            },
+            status=status.HTTP_201_CREATED,
         )

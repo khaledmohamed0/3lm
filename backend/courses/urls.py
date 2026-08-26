@@ -171,6 +171,12 @@ urlpatterns = [
         TeacherCourseStudentsView.as_view(),
         name="teacher-course-students",
     ),
+    path(
+        "teacher/lessons/<int:lesson_id>/video/",
+        TeacherLessonVideoUploadView.as_view(),
+        name="teacher-lesson-video-upload",
+    ),
+    
 
 
 ]
