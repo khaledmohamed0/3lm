@@ -12,11 +12,8 @@ from rest_framework import status
 from django.db.models import Count, Q
 from django.contrib.auth import get_user_model
 from accounts.models import User
-from .services import (
-    is_lesson_unlocked,
-    create_bunny_video,
-    create_bunny_upload_signature,
-)
+from .services import *
+
 from .models import (
     Course,
     Lesson,

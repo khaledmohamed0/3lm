@@ -4,18 +4,26 @@ Django settings for config project.
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / ".env")
 
 # =========================================================
 # SECURITY
 # =========================================================
 
 SECRET_KEY = "mlW5cqpNce401PggNreUWGUGZFrD_A-Ab43gy4z2oxspSdVJ5fB_KP3UJezKO_bg568"
+BUNNY_LIBRARY_ID = os.getenv("BUNNY_LIBRARY_ID")
+BUNNY_API_KEY = os.getenv("BUNNY_API_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
     "loda2007.pythonanywhere.com",
 ]
 

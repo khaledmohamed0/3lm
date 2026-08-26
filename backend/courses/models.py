@@ -53,6 +53,12 @@ class Lesson(models.Model):
         null=True,
     )
 
+    bunny_video_id = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
+
     lesson_pdf = models.FileField(
         upload_to="lessons/pdfs/",
         blank=True,

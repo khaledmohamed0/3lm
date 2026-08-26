@@ -19,7 +19,6 @@ class LessonSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-
         model = Lesson
 
         fields = [
@@ -28,6 +27,7 @@ class LessonSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "video_url",
+            "bunny_video_id",
             "lesson_pdf",
             "assignment_pdf",
             "order",
@@ -35,6 +35,9 @@ class LessonSerializer(serializers.ModelSerializer):
             "exam_id",
         ]
 
+        read_only_fields = [
+            "bunny_video_id",
+        ]
 
 
 class CourseSerializer(serializers.ModelSerializer):
