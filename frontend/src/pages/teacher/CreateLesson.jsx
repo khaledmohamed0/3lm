@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import * as tus from "tus-js-client";
 
 import api from "../../api/axios";
 import "../../styles/create-lesson.css";
@@ -21,12 +22,18 @@ function CreateLesson() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const [videoFile, setVideoFile] = useState(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [uploadingVideo, setUploadingVideo] = useState(false);
+    const [bunnyVideoId, setBunnyVideoId] = useState("");
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
         setLoading(true);
         setError("");
+        setUploadProgress(0);
 
         try {
 
@@ -35,7 +42,6 @@ function CreateLesson() {
             formData.append("course", courseId);
             formData.append("title", title);
             formData.append("description", description);
-            formData.append("video_url", videoUrl);
             formData.append("order", order);
             formData.append(
                 "is_published",
@@ -56,10 +62,165 @@ function CreateLesson() {
                 );
             }
 
-            await api.post(
+            /*
+            |--------------------------------------------------------------------------
+            | Create Lesson
+            |--------------------------------------------------------------------------
+            */
+
+            const lessonResponse = await api.post(
                 "/courses/teacher/lessons/",
                 formData
             );
+
+            const lesson = lessonResponse.data;
+
+            /*
+            |--------------------------------------------------------------------------
+            | No video selected
+            |--------------------------------------------------------------------------
+            */
+
+            if (!videoFile) {
+
+                navigate(
+                    `/teacher/courses/${courseId}`
+                );
+
+                return;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Create Bunny Video
+            |--------------------------------------------------------------------------
+            */
+
+            setUploadingVideo(true);
+
+            const bunnyResponse = await api.post(
+                `/courses/teacher/lessons/${lesson.id}/video/`,
+                {
+                    title: title,
+                }
+            );
+
+            const bunnyData = bunnyResponse.data;
+
+            const upload = bunnyData.upload;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Upload directly to Bunny
+            |--------------------------------------------------------------------------
+            */
+
+            await new Promise(
+                (resolve, reject) => {
+
+                    const uploadInstance = new tus.Upload(
+                        videoFile,
+                        {
+
+                            endpoint:
+                                upload.endpoint,
+
+                            retryDelays: [
+                                0,
+                                3000,
+                                5000,
+                                10000,
+                                20000,
+                            ],
+
+                            headers: {
+                                AuthorizationSignature:
+                                    upload.signature,
+
+                                AuthorizationExpire:
+                                    String(upload.expiration_time),
+
+                                VideoId:
+                                    upload.video_id,
+
+                                LibraryId:
+                                    String(upload.library_id),
+                            },
+
+                            metadata: {
+                                filetype:
+                                    videoFile.type,
+
+                                filename:
+                                    videoFile.name,
+                            },
+
+                            onError: (error) => {
+
+                                console.error(
+                                    "Bunny upload error:",
+                                    error
+                                );
+
+                                reject(error);
+                            },
+
+                            onProgress: (
+                                bytesUploaded,
+                                bytesTotal
+                            ) => {
+
+                                const percentage =
+                                    Math.floor(
+                                        (
+                                            bytesUploaded /
+                                            bytesTotal
+                                        ) * 100
+                                    );
+
+                                setUploadProgress(
+                                    percentage
+                                );
+                            },
+
+                            onSuccess: () => {
+
+                                console.log(
+                                    "Bunny upload completed."
+                                );
+
+                                resolve();
+                            },
+
+                        }
+                    );
+
+                    uploadInstance.start();
+
+                }
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Save Bunny Video ID on Lesson
+            |--------------------------------------------------------------------------
+            */
+
+            await api.patch(
+                `/courses/teacher/lessons/${lesson.id}/`,
+                {
+                    bunny_video_id:
+                        upload.video_id,
+                }
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Done
+            |--------------------------------------------------------------------------
+            */
+
+            setUploadProgress(100);
 
             navigate(
                 `/teacher/courses/${courseId}`
@@ -73,15 +234,21 @@ function CreateLesson() {
             );
 
             setError(
-                error.response?.data ||
-                "Unable to create lesson."
+                error.response?.data
+                    ? JSON.stringify(
+                        error.response.data
+                    )
+                    : error.message ||
+                    "Unable to create lesson."
             );
 
         } finally {
 
             setLoading(false);
+            setUploadingVideo(false);
 
         }
+
     };
 
 
@@ -175,6 +342,8 @@ function CreateLesson() {
                     </div>
 
 
+                    
+
                     <div className="form-group">
 
                         <label>
@@ -185,12 +354,59 @@ function CreateLesson() {
                             type="url"
                             value={videoUrl}
                             onChange={(e) =>
-                                setVideoUrl(
-                                    e.target.value
-                                )
+                                setVideoUrl(e.target.value)
                             }
                             placeholder="https://..."
                         />
+
+                    </div>
+
+
+                    <div className="form-group">
+
+                        <label>
+                            Lesson Video
+                        </label>
+
+                        <input
+                            type="file"
+                            accept="video/*"
+                            onChange={(e) => {
+                                setVideoFile(
+                                    e.target.files[0] || null
+                                );
+                            }}
+                        />
+                        {uploadingVideo && (
+                            <div className="video-upload-progress">
+
+                                <p>
+                                    Uploading video... {uploadProgress}%
+                                </p>
+
+                                <div className="progress-bar">
+
+                                    <div
+                                        className="progress-bar-fill"
+                                        style={{
+                                            width: `${uploadProgress}%`,
+                                        }}
+                                    />
+
+                                </div>
+
+                            </div>
+                        )}
+
+                        
+
+                        {videoFile && (
+                            <p>
+                                Selected: {videoFile.name}
+                            </p>
+                        )}
+
+
 
                     </div>
 
@@ -273,13 +489,15 @@ function CreateLesson() {
 
 
                     <button
-                        type="submit"
-                        className="create-lesson-submit"
-                        disabled={loading}
-                    >
-                        {loading
-                            ? "Creating..."
-                            : "Create Lesson"}
+                            type="submit"
+                            className="create-lesson-submit"
+                            disabled={loading}
+                        >
+                        {uploadingVideo
+                            ? `Uploading Video ${uploadProgress}%`
+                            : loading
+                                ? "Creating..."
+                                : "Create Lesson"}
                     </button>
 
                 </form>
