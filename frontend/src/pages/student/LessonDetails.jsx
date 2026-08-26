@@ -162,66 +162,11 @@ function LessonDetails() {
     }
 
 
-    /*
-     * Convert YouTube URL into embed URL
-     */
-    const getYoutubeEmbedUrl = (url) => {
-
-        if (!url) {
-            return null;
-        }
-
-        try {
-
-            const parsedUrl =
-                new URL(url);
-
-            if (
-                parsedUrl.hostname.includes(
-                    "youtu.be"
-                )
-            ) {
-
-                const videoId =
-                    parsedUrl.pathname.substring(1);
-
-                return `https://www.youtube.com/embed/${videoId}`;
-            }
-
-            if (
-                parsedUrl.hostname.includes(
-                    "youtube.com"
-                )
-            ) {
-
-                const videoId =
-                    parsedUrl.searchParams.get(
-                        "v"
-                    );
-
-                if (videoId) {
-                    return `https://www.youtube.com/embed/${videoId}`;
-                }
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Invalid YouTube URL:",
-                error
-            );
-
-        }
-
-        return null;
-    };
 
 
-    const youtubeUrl =
-        getYoutubeEmbedUrl(
-            lesson.video_url
-        );
 
+
+    const videoUrl = lesson.video_url;
 
     return (
         <StudentLayout>
@@ -284,12 +229,12 @@ function LessonDetails() {
                     </div>
 
 
-                    {youtubeUrl ? (
+                    {videoUrl ? (
 
                         <div className="video-container">
 
                             <iframe
-                                src={youtubeUrl}
+                                src={videoUrl}
                                 title={lesson.title}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
