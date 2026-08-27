@@ -1,647 +1,247 @@
-
-import { useState } from "react";
+import React, { useState } from 'react';
+import { Mail, Lock, User, Eye, EyeOff, BookOpen, GraduationCap } from 'lucide-react';
+import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 
-import api from "../../api/axios";
-import "../../styles/auth.css";
 
-function Signup() {
-    const navigate = useNavigate();
+export default function SignUp({ onNavigateToLogin, onSignUpSuccess }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [userRole, setUserRole] = useState('student');
+  
+  const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        first_name: "",
-        last_name: "",
-        username: "",
-        email: "",
-        phone_number: "",
-        password: "",
-        confirm_password: "",
-    });
+  
+  
 
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
-    const [loading, setLoading] = useState(false);
+  
 
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] =
-        useState(false);
+  
+  const [formData, setFormData] = useState({
+    username: '',
+    fullName: '',
+    email: '',
+    phone: '',
+    password: '',
+    gradeLevel: 'primary',
+  });
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        setFormData((previous) => ({
-            ...previous,
-            [name]: value,
-        }));
+    try {
+        const response = await api.post("/auth/register/", {
+        username: formData.username,
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        gradeLevel:
+            userRole === "student"
+            ? formData.gradeLevel
+            : null,
+        role: userRole,
+        });
 
-        setError("");
-    };
+        console.log("Signup successful:", response.data);
 
+        // Registration successful → Login
+        navigate("/login");
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    } catch (error) {
+        console.error("Signup Error:", error);
 
-        setError("");
-        setSuccess("");
-
-
-        if (formData.password.length < 8) {
-            setError(
-                "Password must be at least 8 characters."
-            );
-
-            return;
+        if (error.response?.data) {
+        console.error("Backend Error:", error.response.data);
         }
-
-
-        if (
-            formData.password !==
-            formData.confirm_password
-        ) {
-            setError(
-                "Passwords do not match."
-            );
-
-            return;
-        }
-
-
-        try {
-            setLoading(true);
-
-            await api.post(
-                "/auth/register/",
-                {
-                    username: formData.username,
-                    email: formData.email,
-                    first_name: formData.first_name,
-                    last_name: formData.last_name,
-                    password: formData.password,
-                    phone_number: formData.phone_number,
-                }
-            );
-
-
-            setSuccess(
-                "Account created successfully! Redirecting to login..."
-            );
-
-
-            setTimeout(() => {
-                navigate("/login");
-            }, 1200);
-
-
-        } catch (error) {
-
-            console.error(
-                "Signup error:",
-                error
-            );
-
-
-            const data =
-                error.response?.data;
-
-
-            if (data) {
-
-                const messages = [];
-
-
-                Object.entries(data).forEach(
-                    ([field, value]) => {
-
-                        if (Array.isArray(value)) {
-
-                            messages.push(
-                                `${ field }: ${ value.join(" ") } `
-                            );
-
-                        } else {
-
-                            messages.push(
-                                `${ field }: ${ value } `
-                            );
-
-                        }
-
-                    }
-                );
-
-
-                setError(
-                    messages.join(" ")
-                    ||
-                    "Unable to create account."
-                );
-
-            } else {
-
-                setError(
-                    "Unable to connect to the server."
-                );
-
-            }
-
-        } finally {
-            setLoading(false);
-        }
-    };
-
-
-    return (
-        <div className="auth-page">
-
-            {/* LEFT BRANDING */}
-
-            <div className="auth-brand">
-
-                <div className="brand-content">
-
-                    <div className="brand-logo">
-                        K
-                    </div>
-
-                    <span className="brand-name">
-                        KMG
-                    </span>
-
-
-                    <h1>
-                        Start.
-                        <br />
-                        Learn.
-                        <br />
-                        Grow.
-                    </h1>
-
-
-                    <p>
-                        Create your account and start
-                        building your knowledge with
-                        structured courses and exams.
-                    </p>
-
-
-                    <div className="brand-stats">
-
-                        <div>
-                            <strong>Courses</strong>
-                            <span>
-                                Learn at your pace
-                            </span>
-                        </div>
-
-
-                        <div>
-                            <strong>Lessons</strong>
-                            <span>
-                                Structured learning
-                            </span>
-                        </div>
-
-
-                        <div>
-                            <strong>Exams</strong>
-                            <span>
-                                Track your progress
-                            </span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            {/* SIGNUP */}
-
-            <div className="auth-container">
-
-                <div className="auth-card">
-
-
-                    {/* Mobile Logo */}
-
-                    <div className="auth-mobile-logo">
-
-                        <div className="brand-logo">
-                            K
-                        </div>
-
-                        <span>
-                            KMG Learning
-                        </span>
-
-                    </div>
-
-
-                    {/* Header */}
-
-                    <div className="auth-header">
-
-                        <span className="auth-label">
-                            GET STARTED
-                        </span>
-
-                        <h2>
-                            Create your account
-                        </h2>
-
-                        <p>
-                            Join KMG Learning and start
-                            your journey.
-                        </p>
-
-                    </div>
-
-
-                    {/* FORM */}
-
-                    <form
-                        className="auth-form"
-                        onSubmit={handleSubmit}
-                    >
-
-
-                        {/* First + Last Name */}
-
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                    "1fr 1fr",
-                                gap: "12px",
-                            }}
-                        >
-
-                            <div className="form-group">
-
-                                <label>
-                                    First Name
-                                </label>
-
-                                <div className="input-wrapper">
-
-                                    <input
-                                        type="text"
-                                        name="first_name"
-                                        value={
-                                            formData.first_name
-                                        }
-                                        onChange={
-                                            handleChange
-                                        }
-                                        placeholder="First name"
-                                        required
-                                    />
-
-                                </div>
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Last Name
-                                </label>
-
-                                <div className="input-wrapper">
-
-                                    <input
-                                        type="text"
-                                        name="last_name"
-                                        value={
-                                            formData.last_name
-                                        }
-                                        onChange={
-                                            handleChange
-                                        }
-                                        placeholder="Last name"
-                                        required
-                                    />
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        {/* Username */}
-
-                        <div className="form-group">
-
-                            <label>
-                                Username
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <span className="input-icon">
-                                    @
-                                </span>
-
-                                <input
-                                    type="text"
-                                    name="username"
-                                    value={
-                                        formData.username
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    placeholder="Choose a username"
-                                    autoComplete="username"
-                                    required
-                                />
-
-                            </div>
-
-                        </div>
-
-
-                        {/* Email */}
-
-                        <div className="form-group">
-
-                            <label>
-                                Email
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <span className="input-icon">
-                                    @
-                                </span>
-
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={
-                                        formData.email
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    placeholder="Enter your email"
-                                    autoComplete="email"
-                                    required
-                                />
-
-                            </div>
-
-                        </div>
-
-                        {/* Phone Number */}
-
-                        <div className="form-group">
-
-                            <label htmlFor="phone_number">
-                                Phone Number
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <span className="input-icon">
-                                    
-                                </span>
-
-                                <input
-                                    id="phone_number"
-                                    type="tel"
-                                    name="phone_number"
-                                    value={formData.phone_number}
-                                    onChange={handleChange}
-                                    placeholder="01xxxxxxxxx"
-                                    autoComplete="tel"
-                                    inputMode="numeric"
-                                    maxLength={11}
-                                    required
-                                />
-
-                            </div>
-
-                        </div>
-
-
-                        {/* Password */}
-
-                        <div className="form-group">
-
-                            <label>
-                                Password
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <span className="input-icon">
-                                    •
-                                </span>
-
-                                <input
-                                    type={
-                                        showPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    name="password"
-                                    value={
-                                        formData.password
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    placeholder="Create a password"
-                                    autoComplete="new-password"
-                                    required
-                                />
-
-                                <button
-                                    type="button"
-                                    className="password-toggle"
-                                    onClick={() =>
-                                        setShowPassword(
-                                            !showPassword
-                                        )
-                                    }
-                                >
-                                    {showPassword
-                                        ? "Hide"
-                                        : "Show"}
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        {/* Confirm Password */}
-
-                        <div className="form-group">
-
-                            <label>
-                                Confirm Password
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <span className="input-icon">
-                                    •
-                                </span>
-
-                                <input
-                                    type={
-                                        showConfirmPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    name="confirm_password"
-                                    value={
-                                        formData.confirm_password
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    placeholder="Repeat your password"
-                                    autoComplete="new-password"
-                                    required
-                                />
-
-                                <button
-                                    type="button"
-                                    className="password-toggle"
-                                    onClick={() =>
-                                        setShowConfirmPassword(
-                                            !showConfirmPassword
-                                        )
-                                    }
-                                >
-                                    {showConfirmPassword
-                                        ? "Hide"
-                                        : "Show"}
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        {/* Error */}
-
-                        {error && (
-
-                            <div className="auth-error">
-
-                                <span>
-                                    !
-                                </span>
-
-                                <p>
-                                    {error}
-                                </p>
-
-                            </div>
-
-                        )}
-
-
-                        {/* Success */}
-
-                        {success && (
-
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "10px",
-                                    padding: "12px 14px",
-                                    borderRadius: "9px",
-                                    background: "#f0fdf4",
-                                    color: "#15803d",
-                                    border:
-                                        "1px solid #dcfce7",
-                                    fontSize: "12px",
-                                }}
-                            >
-
-                                <span>
-                                    ✓
-                                </span>
-
-                                {success}
-
-                            </div>
-
-                        )}
-
-
-                        {/* Submit */}
-
-                        <button
-                            type="submit"
-                            className="auth-submit"
-                            disabled={loading}
-                        >
-
-                            {loading ? (
-                                <>
-                                    <span className="spinner" />
-                                    Creating account...
-                                </>
-                            ) : (
-                                <>
-                                    Create Account
-                                    <span>→</span>
-                                </>
-                            )}
-
-                        </button>
-
-                    </form>
-
-
-                    {/* Footer */}
-
-                    <div className="auth-footer">
-
-                        <span>
-                            Already have an account?
-                        </span>
-
-                        <button
-                            type="button"
-                            onClick={() =>
-                                navigate("/login")
-                            }
-                        >
-                            Sign in
-                        </button>
-
-                    </div>
-
-
-                    <div className="auth-security">
-
-                        <span>
-                            🔒
-                        </span>
-
-                        Secure learning platform
-
-                    </div>
-
-                </div>
-
-            </div>
-
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#F7F6F2] flex items-center justify-center p-4 font-arabic dir-rtl" dir="rtl">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden border border-amber-100">
+        
+        {/* Header Section */}
+        <div className="bg-[#00406E] p-6 text-center text-white relative">
+          <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
+            <GraduationCap className="w-10 h-10 text-[#C5922E]" />
+          </div>
+          <h2 className="text-3xl font-bold tracking-wide">عِلّْم</h2>
+          <p className="text-xs text-[#C5922E] mt-1 font-semibold">كُنْ مَنْ يُعَلِّمْ وَيَتَعَلَّمْ</p>
+          <p className="text-sm text-gray-200 mt-2">أنشئ حسابك وابدأ رحلة التعلم</p>
         </div>
-    );
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 text-right">
+          
+          {/* Role Selector */}
+          <div className="flex gap-3 mb-2">
+            <button
+              type="button"
+              onClick={() => setUserRole('student')}
+              className={`flex-1 py-2 px-3 rounded-lg border text-sm font-semibold flex items-center justify-center gap-2 transition ${
+                userRole === 'student'
+                  ? 'border-[#C5922E] bg-amber-50 text-[#C5922E]'
+                  : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+              }`}
+            >
+              <User className="w-4 h-4" /> طالب
+            </button>
+            <button
+              type="button"
+              onClick={() => setUserRole('teacher')}
+              className={`flex-1 py-2 px-3 rounded-lg border text-sm font-semibold flex items-center justify-center gap-2 transition ${
+                userRole === 'teacher'
+                  ? 'border-[#C5922E] bg-amber-50 text-[#C5922E]'
+                  : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" /> معلم
+            </button>
+          </div>
+
+          {/* Full Name Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">الاسم بالكامل</label>
+            <div className="relative">
+              <User className="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                name="fullName"
+                required
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="أدخل اسمك الكامل"
+                className="w-full pr-10 pl-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#00406E] transition"
+              />
+            </div>
+          </div>
+
+          {/* Email Input */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+                <div className="relative">
+                <Mail className="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="example@domain.com"
+                    className="w-full pr-10 pl-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#00406E] transition text-left dir-ltr"
+                />
+                </div>
+            </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        اسم المستخدم
+                    </label>
+
+                    <div className="relative">
+                        <User className="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+
+                        <input
+                        type="text"
+                        name="username"
+                        required
+                        value={formData.username}
+                        onChange={handleChange}
+                        placeholder="اختر اسم مستخدم"
+                        className="w-full pr-10 pl-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#00406E] transition text-left"
+                        dir="ltr"
+                        />
+                    </div>
+                </div>
+
+          {/* Phone Number Input */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                    رقم الهاتف
+                </label>
+
+                <div className="relative">
+                    <input
+                    type="tel"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="01xxxxxxxxx"
+                    dir="ltr"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#00406E] transition text-left"
+                    />
+                </div>
+            </div>
+
+          {/* Grade Level Select (Student only) */}
+          {userRole === 'student' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">المرحلة الدراسية</label>
+              <select
+                name="gradeLevel"
+                value={formData.gradeLevel}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#00406E] transition bg-white"
+              >
+                <option value="primary">المرحلة الابتدائية</option>
+                <option value="prep">المرحلة الإعدادية</option>
+                <option value="secondary">المرحلة الثانوية</option>
+                <option value="university">المرحلة الجامعية</option>
+              </select>
+            </div>
+          )}
+
+          {/* Password Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+            <div className="relative">
+              <Lock className="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                className="w-full pr-10 pl-10 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#00406E] transition text-left dir-ltr"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-[#C5922E] hover:bg-opacity-90 text-white font-bold py-3 rounded-lg shadow-md transition transform active:scale-95 mt-2"
+          >
+            إنشاء حساب جديد
+          </button>
+
+          {/* Switch to Login */}
+          <div className="text-center mt-4 text-sm text-gray-600">
+            لديك حساب بالفعل؟{' '}
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="text-[#00406E] font-bold hover:underline"
+            >
+              سجل دخولك
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  );
 }
-
-export default Signup;
-

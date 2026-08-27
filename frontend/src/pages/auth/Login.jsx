@@ -1,306 +1,159 @@
-
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-
-import "../../styles/auth.css";
-
-function Login() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-
-    const [error, setError] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
-
-    const { login } = useAuth();
-    const navigate = useNavigate();
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        setError("");
-        setLoading(true);
-
-        try {
-            await login(username, password);
-
-            navigate("/dashboard");
-
-        } catch (error) {
-
-            console.error(error);
-
-            setError(
-                error.response?.data?.detail ||
-                "Invalid username or password."
-            );
-
-        } finally {
-            setLoading(false);
-        }
-    };
-
-
-    return (
-        <div className="auth-page">
-
-            {/* Left Branding */}
-
-            <div className="auth-brand">
-
-                <div className="brand-content">
-
-                    <div className="brand-logo">
-                        K
-                    </div>
-
-                    <span className="brand-name">
-                        KMG
-                    </span>
-
-                    <h1>
-                        Learn.
-                        <br />
-                        Build.
-                        <br />
-                        Grow.
-                    </h1>
-
-                    <p>
-                        Your learning journey starts here.
-                        Learn from structured courses,
-                        complete lessons, and test your knowledge.
-                    </p>
-
-                    <div className="brand-stats">
-
-                        <div>
-                            <strong>Courses</strong>
-                            <span>Learn at your pace</span>
-                        </div>
-
-                        <div>
-                            <strong>Lessons</strong>
-                            <span>Structured learning</span>
-                        </div>
-
-                        <div>
-                            <strong>Exams</strong>
-                            <span>Track your progress</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            {/* Login */}
-
-            <div className="auth-container">
-
-                <div className="auth-card">
-
-                    <div className="auth-mobile-logo">
-                        <div className="brand-logo">
-                            K
-                        </div>
-
-                        <span>
-                            KMG Learning
-                        </span>
-                    </div>
-
-
-                    <div className="auth-header">
-
-                        <span className="auth-label">
-                            WELCOME BACK
-                        </span>
-
-                        <h2>
-                            Sign in to your account
-                        </h2>
-
-                        <p>
-                            Continue your learning journey.
-                        </p>
-
-                    </div>
-
-
-                    <form
-                        className="auth-form"
-                        onSubmit={handleSubmit}
-                    >
-
-                        {/* Username */}
-
-                        <div className="form-group">
-
-                            <label>
-                                Username
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <span className="input-icon">
-                                    @
-                                </span>
-
-                                <input
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) =>
-                                        setUsername(
-                                            e.target.value
-                                        )
-                                    }
-                                    placeholder="Enter your username"
-                                    autoComplete="username"
-                                    required
-                                />
-
-                            </div>
-
-                        </div>
-
-
-                        {/* Password */}
-
-                        <div className="form-group">
-
-                            <div className="label-row">
-
-                                <label>
-                                    Password
-                                </label>
-
-                            </div>
-
-
-                            <div className="input-wrapper">
-
-                                <span className="input-icon">
-                                    •
-                                </span>
-
-                                <input
-                                    type={
-                                        showPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    value={password}
-                                    onChange={(e) =>
-                                        setPassword(
-                                            e.target.value
-                                        )
-                                    }
-                                    placeholder="Enter your password"
-                                    autoComplete="current-password"
-                                    required
-                                />
-
-                                <button
-                                    type="button"
-                                    className="password-toggle"
-                                    onClick={() =>
-                                        setShowPassword(
-                                            !showPassword
-                                        )
-                                    }
-                                >
-                                    {showPassword
-                                        ? "Hide"
-                                        : "Show"}
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        {/* Error */}
-
-                        {error && (
-
-                            <div className="auth-error">
-
-                                <span>!</span>
-
-                                <p>
-                                    {error}
-                                </p>
-
-                            </div>
-
-                        )}
-
-
-                        {/* Submit */}
-
-                        <button
-                            type="submit"
-                            className="auth-submit"
-                            disabled={loading}
-                        >
-
-                            {loading ? (
-                                <>
-                                    <span className="spinner" />
-                                    Signing in...
-                                </>
-                            ) : (
-                                <>
-                                    Sign In
-                                    <span>→</span>
-                                </>
-                            )}
-
-                        </button>
-
-                    </form>
-
-
-                    <div className="auth-footer">
-
-                        <span>
-                            Don't have an account?
-                        </span>
-
-                        <button
-                            type="button"
-                            onClick={() =>
-                                navigate("/signup")
-                            }
-                        >
-                            Create account
-                        </button>
-
-                    </div>
-
-
-                    <div className="auth-security">
-
-                        <span>
-                            🔒
-                        </span>
-
-                        Secure learning platform
-
-                    </div>
-
-                </div>
-
-            </div>
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { User, Lock, Eye, EyeOff, GraduationCap, Loader2, AlertCircle } from 'lucide-react';
+import { useAuth } from "../../context/AuthContext"; 
+
+
+
+export default function Login({ onNavigateToSignUp, onLoginSuccess }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    rememberMe: false,
+  });
+
+  const handleChange = (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
+    setErrorMessage(''); // مسح الخطأ عند التعديل
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+        await login(formData.username, formData.password);
+        navigate("/dashboard");
+    } catch (err) {
+        console.error("Login Error:", err);
+        const msg =
+        err.response?.data?.detail ||
+        err.response?.data?.message ||
+        "اسم المستخدم أو كلمة السر غير صحيحة";
+        setErrorMessage(msg);
+    } finally {
+        setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#F7F6F2] flex items-center justify-center p-4 font-arabic" dir="rtl">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden border border-amber-100">
+        
+        {/* Header Section */}
+        <div className="bg-[#00406E] p-6 text-center text-white relative">
+          <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
+            <GraduationCap className="w-10 h-10 text-[#C5922E]" />
+          </div>
+          <h2 className="text-3xl font-bold tracking-wide">عِلّْم</h2>
+          <p className="text-xs text-[#C5922E] mt-1 font-semibold">كُنْ مَنْ يُعَلِّمْ وَيَتَعَلَّمْ</p>
+          <p className="text-sm text-gray-200 mt-2">مرحباً بعودتك! سجل دخولك للمتابعة</p>
         </div>
-    );
+
+        {/* Form Body */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 text-right">
+          
+          {/* Alert Message */}
+          {errorMessage && (
+            <div className="bg-rose-50 border border-rose-200 text-rose-700 text-xs p-3 rounded-xl flex items-center gap-2 dir-rtl">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
+          {/* Username Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">اسم المستخدم (Username)</label>
+            <div className="relative">
+              <User className="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                name="username"
+                required
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="أدخل اسم المستخدم"
+                className="w-full pr-10 pl-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#00406E] transition text-right"
+              />
+            </div>
+          </div>
+
+          {/* Password Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+            <div className="relative">
+              <Lock className="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                className="w-full pr-10 pl-10 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#00406E] transition text-left dir-ltr"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Remember / Forgot Password */}
+          <div className="flex items-center justify-between text-sm">
+            <label className="flex items-center gap-2 text-gray-600 cursor-pointer">
+              <input 
+                type="checkbox" 
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleChange}
+                className="rounded text-[#00406E] focus:ring-[#00406E]" 
+              />
+              تذكرني
+            </label>
+            <a href="#forgot" className="text-[#C5922E] hover:underline font-semibold">نسيت كلمة المرور؟</a>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#C5922E] hover:bg-opacity-90 text-white font-bold py-3 rounded-lg shadow-md transition transform active:scale-95 mt-2 flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" /> جاري تسجيل الدخول...
+              </>
+            ) : (
+              'تسجيل الدخول'
+            )}
+          </button>
+
+          {/* Switch to SignUp */}
+          <div className="text-center mt-4 text-sm text-gray-600">
+            ليس لديك حساب؟{" "}
+            <button
+                type="button"
+                onClick={() => navigate("/signup")}
+                className="text-[#00406E] font-bold hover:underline"
+            >
+                أنشئ حساباً الآن
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  );
 }
-
-export default Login;
-

@@ -4,79 +4,91 @@ import api from "../api/axios";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [accessToken, setAccessToken] = useState(
-        localStorage.getItem("access_token")
-    );
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("access_token")
+  );
+  const [loading, setLoading] = useState(true);
 
-    const login = async (username, password) => {
-        const response = await api.post("/auth/login/", {
-            username,
-            password,
-        });
+  const getCurrentUser = async (token = accessToken) => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
-        const { access, refresh } = response.data;
+    try {
+      const response = await api.get("/auth/me/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUser(response.data);
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+      // لو الـ Token طلع منتهي أو 401 بنمسحه من غير ما نعلق الـ App
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      setAccessToken(null);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        localStorage.setItem("access_token", access);
-        localStorage.setItem("refresh_token", refresh);
+  const login = async (username, password) => {
+    setLoading(true);
+    try {
+      const response = await api.post("/auth/login/", {
+        username,
+        password,
+      });
 
-        setAccessToken(access);
+      const { access, refresh } = response.data;
 
-        await getCurrentUser(access);
-    };
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
 
-    const getCurrentUser = async (token = accessToken) => {
-        try {
-            const response = await api.get("/auth/me/", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+      setAccessToken(access);
+      await getCurrentUser(access);
+      return response.data;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            setUser(response.data);
-        } catch (error) {
-            console.error("Failed to get current user:", error);
-            logout();
-        } finally {
-            setLoading(false);
-        }
-    };
+  const logout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
 
-    const logout = () => {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
+    setAccessToken(null);
+    setUser(null);
+    setLoading(false);
+  };
 
-        setAccessToken(null);
-        setUser(null);
-        setLoading(false);
-    };
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      getCurrentUser(token);
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
-    useEffect(() => {
-        const token = localStorage.getItem("access_token");
+  const value = {
+    user,
+    accessToken,
+    loading,
+    login,
+    logout,
+  };
 
-        if (token) {
-            getCurrentUser(token);
-        } else {
-            setLoading(false);
-        }
-    }, []);
-
-    const value = {
-        user,
-        accessToken,
-        loading,
-        login,
-        logout,
-    };
-
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children} {/* 👈 دي بتمنع الشاشة البيضاء لحد ما الـ auth يجهز */}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-    return useContext(AuthContext);
+  return useContext(AuthContext);
 }
