@@ -36,6 +36,30 @@ class RegisterSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
+    academicYear = serializers.ChoiceField(
+        choices=[
+            ("GRADE_1_PRIMARY", "أولى ابتدائي"),
+            ("GRADE_2_PRIMARY", "تانية ابتدائي"),
+            ("GRADE_3_PRIMARY", "تالتة ابتدائي"),
+            ("GRADE_4_PRIMARY", "رابعة ابتدائي"),
+            ("GRADE_5_PRIMARY", "خامسة ابتدائي"),
+            ("GRADE_6_PRIMARY", "سادسة ابتدائي"),
+
+            ("GRADE_1_PREPARATORY", "أولى إعدادي"),
+            ("GRADE_2_PREPARATORY", "تانية إعدادي"),
+            ("GRADE_3_PREPARATORY", "تالتة إعدادي"),
+
+            ("GRADE_1_SECONDARY", "أولى ثانوي"),
+            ("GRADE_2_SECONDARY", "تانية ثانوي"),
+            ("GRADE_3_SECONDARY", "تالتة ثانوي"),
+
+            ("UNIVERSITY", "جامعة"),
+        ],
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+
     role = serializers.ChoiceField(
         choices=[
             ("student", "Student"),
@@ -59,6 +83,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "phone",
             "password",
             "gradeLevel",
+            "academicYear",
             "role",
         ]
 
@@ -82,17 +107,26 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return value
 
+
     def validate(self, attrs):
+
         role = attrs.get("role")
         grade_level = attrs.get("gradeLevel")
+        academic_year = attrs.get("academicYear")
 
         if role == "student" and not grade_level:
             raise serializers.ValidationError({
                 "gradeLevel": "Grade level is required for students."
             })
 
+        if role == "student" and not academic_year:
+            raise serializers.ValidationError({
+                "academicYear": "Academic year is required for students."
+            })
+
         if role == "teacher":
             attrs["gradeLevel"] = None
+            attrs["academicYear"] = None
 
         return attrs
 
@@ -103,6 +137,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         email = validated_data.pop("email")
         phone = validated_data.pop("phone")
         grade_level = validated_data.pop("gradeLevel", None)
+        academic_year = validated_data.pop("academicYear", None)
         role = validated_data.pop("role")
         password = validated_data.pop("password")
 
@@ -118,6 +153,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             last_name=last_name,
             phone_number=phone,
             password=password,
+            academic_year=academic_year,
             role=(
                 User.Role.STUDENT
                 if role == "student"

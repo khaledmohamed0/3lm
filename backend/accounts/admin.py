@@ -14,11 +14,15 @@ class CustomUserAdmin(UserAdmin):
         "last_name",
         "phone_number",
         "role",
+        "academic_year",
+        "grade_level",
         "is_active",
     )
 
     list_filter = (
         "role",
+        "grade_level",
+        "academic_year",
         "is_active",
     )
 
@@ -37,6 +41,8 @@ class CustomUserAdmin(UserAdmin):
                 "fields": (
                     "phone_number",
                     "role",
+                    "grade_level",
+                    "academic_year",
                 ),
             },
         ),
@@ -52,6 +58,8 @@ class CustomUserAdmin(UserAdmin):
                     "last_name",
                     "phone_number",
                     "role",
+                    "grade_level",
+                    "academic_year",
                 ),
             },
         ),

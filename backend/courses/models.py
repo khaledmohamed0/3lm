@@ -1,7 +1,35 @@
 from django.conf import settings
 from django.db import models
 
+
 class Course(models.Model):
+
+    CATEGORY_CHOICES = [
+        ("PRIMARY", "ابتدائي"),
+        ("PREPARATORY", "إعدادي"),
+        ("SECONDARY", "ثانوي"),
+        ("UNIVERSITY", "جامعة"),
+    ]
+
+    ACADEMIC_YEAR_CHOICES = [
+        ("GRADE_1_PRIMARY", "أولى ابتدائي"),
+        ("GRADE_2_PRIMARY", "تانية ابتدائي"),
+        ("GRADE_3_PRIMARY", "تالتة ابتدائي"),
+        ("GRADE_4_PRIMARY", "رابعة ابتدائي"),
+        ("GRADE_5_PRIMARY", "خامسة ابتدائي"),
+        ("GRADE_6_PRIMARY", "سادسة ابتدائي"),
+
+        ("GRADE_1_PREPARATORY", "أولى إعدادي"),
+        ("GRADE_2_PREPARATORY", "تانية إعدادي"),
+        ("GRADE_3_PREPARATORY", "تالتة إعدادي"),
+
+        ("GRADE_1_SECONDARY", "أولى ثانوي"),
+        ("GRADE_2_SECONDARY", "تانية ثانوي"),
+        ("GRADE_3_SECONDARY", "تالتة ثانوي"),
+
+        ("UNIVERSITY", "جامعة"),
+    ]
+
     teacher = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -10,20 +38,37 @@ class Course(models.Model):
         null=True,
         blank=True,
     )
+
     title = models.CharField(max_length=200)
+
     description = models.TextField(blank=True)
+
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        null=True
+    )
+
+    academic_year = models.CharField(
+        max_length=30,
+        choices=ACADEMIC_YEAR_CHOICES,
+        null = True
+    )
+
     price = models.DecimalField(
-    max_digits=10,
-    decimal_places=2,
-    default=0,
-    null=True,
-    blank=True,
-)
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        null=True,
+        blank=True,
+    )
+
     thumbnail = models.ImageField(
         upload_to="courses/thumbnails/",
         blank=True,
         null=True,
     )
+
     is_published = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -34,6 +79,8 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+
 
 
 
@@ -59,14 +106,29 @@ class Lesson(models.Model):
         null=True,
     )
 
-    lesson_pdf = models.FileField(
-        upload_to="lessons/pdfs/",
+    bunny_solution_video_id = models.CharField(
+        max_length=100,
         blank=True,
         null=True,
     )
 
-    assignment_pdf = models.FileField(
-        upload_to="lessons/assignments/",
+    lesson_pdf_url = models.URLField(
+        blank=True,
+        null=True,
+    )
+
+    assignment_pdf_url = models.URLField(
+        blank=True,
+        null=True,
+    )
+
+    assignment_video_url = models.URLField(
+        blank=True,
+        null=True,
+    )
+
+    bunny_assignment_video_id = models.CharField(
+        max_length=100,
         blank=True,
         null=True,
     )
@@ -322,6 +384,11 @@ class ExamQuestion(models.Model):
         ],
     )
 
+    explanation = models.TextField(
+        blank=True,
+        null=True,
+    )
+
     order = models.PositiveIntegerField(
         default=1
     )
@@ -360,3 +427,206 @@ class ExamAttemptAnswer(models.Model):
             f"{self.question} - "
             f"{self.selected_answer}"
         )
+
+
+
+class TodoItem(models.Model):
+
+    PRIORITY_CHOICES = [
+        ("LOW", "منخفضة"),
+        ("MEDIUM", "متوسطة"),
+        ("HIGH", "عالية"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="todo_items",
+    )
+
+    title = models.CharField(max_length=200)
+
+    description = models.TextField(
+        blank=True,
+        null=True,
+    )
+
+    due_date = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
+    priority = models.CharField(
+        max_length=10,
+        choices=PRIORITY_CHOICES,
+        default="MEDIUM",
+    )
+
+    is_completed = models.BooleanField(
+        default=False,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        ordering = ["is_completed", "-created_at"]
+
+    def __str__(self):
+        return self.title
+
+
+
+class TeacherNews(models.Model):
+
+    teacher = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="teacher_news",
+        limit_choices_to={"role": "TEACHER"},
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name="news",
+        null=True,
+        blank=True,
+    )
+
+    title = models.CharField(max_length=200)
+
+    content = models.TextField()
+
+    is_published = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.title
+
+
+
+class LiveLesson(models.Model):
+
+    teacher = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="live_lessons",
+        limit_choices_to={"role": "TEACHER"},
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name="live_lessons",
+    )
+
+    title = models.CharField(max_length=200)
+
+    description = models.TextField(
+        blank=True,
+        null=True,
+    )
+
+    start_time = models.DateTimeField()
+
+    duration_minutes = models.PositiveIntegerField(
+        default=60,
+    )
+
+    meeting_url = models.URLField(
+        blank=True,
+        null=True,
+    )
+
+    is_published = models.BooleanField(
+        default=False,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    class Meta:
+        ordering = ["start_time"]
+
+    def __str__(self):
+        return self.title
+
+
+class AssignmentSubmission(models.Model):
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="assignment_submissions",
+    )
+
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        related_name="assignment_submissions",
+    )
+
+    file_path = models.CharField(max_length=500,null=True,blank=True)
+
+    submitted_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["student", "lesson"],
+                name="unique_student_lesson_assignment",
+            )
+        ]
+
+    def __str__(self):
+        return (
+            f"{self.student.username} - "
+            f"{self.lesson.title}"
+        )
+
+
+
+class LessonQuestion(models.Model):
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        related_name="questions"
+    )
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="lesson_questions"
+    )
+
+    question = models.TextField()
+
+    answer = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return f"{self.student.username} - {self.lesson.title}"

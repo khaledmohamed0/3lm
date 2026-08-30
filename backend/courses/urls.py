@@ -176,7 +176,74 @@ urlpatterns = [
         TeacherLessonVideoUploadView.as_view(),
         name="teacher-lesson-video-upload",
     ),
+    path(
+        "student/todos/",
+        StudentTodoListView.as_view(),
+        name="student-todos",
+    ),
     
+    path(
+        "student/todos/<int:pk>/",
+        StudentTodoDetailView.as_view(),
+        name="student-todo-detail",
+    ),
+
+
+    path(
+        "student/news/",
+        StudentTeacherNewsView.as_view(),
+        name="student-teacher-news",
+    ),
+
+    
+    path(
+        "student/live-lessons/",
+        StudentLiveLessonsView.as_view(),
+        name="student-live-lessons",
+    ),
+
+    path(
+        "student/recommended-courses/",
+        StudentRecommendedCoursesView.as_view(),
+        name="student-recommended-courses",
+    ),
+
+    path(
+        "student/notifications/",
+        StudentNotificationsView.as_view(),
+        name="student-notifications",
+    ),
+
+    path(
+        "student/learning-stats/",
+        StudentLearningStatsView.as_view(),
+        name="student-learning-stats",
+    ),
+    path(
+        "student/learning-stats/",
+        StudentLearningStatsView.as_view(),
+        name="student-learning-stats",
+    ),
+
+    path(
+        "test-storage-upload/",
+        TestStorageUploadView.as_view(),
+        name="test-storage-upload",
+    ),
+
+    path(
+        "lessons/<int:lesson_id>/assignment/submit/",
+        SubmitAssignmentView.as_view(),
+        name="submit-assignment",
+    ),
+
+
+    path(
+        "lessons/<int:lesson_id>/questions/",
+        LessonQuestionListCreateView.as_view(),
+        name="lesson-questions",
+    ),
+
 
 
 ]

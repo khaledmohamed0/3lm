@@ -2,6 +2,8 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.utils import timezone
+from datetime import timedelta
 from rest_framework.response import Response
 from django.db import transaction
 from django.conf import settings
@@ -14,6 +16,13 @@ from django.contrib.auth import get_user_model
 from accounts.models import User
 from .services import *
 
+
+from rest_framework import status
+
+
+from .storage import upload_file
+
+
 from .models import (
     Course,
     Lesson,
@@ -25,6 +34,10 @@ from .models import (
     ExamAttemptAnswer,
     Wallet,
     WalletTransaction,
+    TodoItem,
+    TeacherNews,
+    LiveLesson,
+    LessonQuestion
 )
 from .serializers import (
     CourseSerializer,
@@ -33,6 +46,7 @@ from .serializers import (
     TeacherCourseSerializer,
     TeacherExamCreateSerializer,
     ExamQuestionSerializer,
+    LessonQuestionSerializer
 
     
 )
@@ -45,27 +59,93 @@ class CourseListView(generics.ListAPIView):
 
 
 class CourseDetailView(generics.RetrieveAPIView):
-    queryset = Course.objects.filter(is_published=True)
+
+    queryset = Course.objects.filter(is_published=True).select_related("teacher")
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated]
 
+    def retrieve(self, request, *args, **kwargs):
+        course = self.get_object()
+
+        is_enrolled = course.enrollments.filter(
+            student=request.user
+        ).exists()
+
+        serializer = self.get_serializer(course)
+
+        data = serializer.data
+
+        data["is_enrolled"] = is_enrolled
+
+        data["teacher"] = {
+            "id": course.teacher.id if course.teacher else None,
+            "username": course.teacher.username if course.teacher else None,
+            "first_name": course.teacher.first_name if course.teacher else "",
+            "last_name": course.teacher.last_name if course.teacher else "",
+        }
+
+        if course.thumbnail:
+            data["thumbnail"] = request.build_absolute_uri(
+                course.thumbnail.url
+            )
+        else:
+            data["thumbnail"] = None
+
+        return Response(data)
+
+
+        
 
 class LessonDetailView(generics.RetrieveAPIView):
-    queryset = Lesson.objects.filter(is_published=True)
+    queryset = Lesson.objects.filter(
+        is_published=True
+    ).select_related(
+        "course"
+    ).prefetch_related(
+        "exam__questions"
+    )
+
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated]
 
     def retrieve(self, request, *args, **kwargs):
         lesson = self.get_object()
 
-        if not is_lesson_unlocked(request.user, lesson):
+        if not is_lesson_unlocked(
+            request.user,
+            lesson
+        ):
             raise PermissionDenied(
                 "This lesson is locked. "
                 "Complete and pass the previous lesson exam first."
             )
 
-        serializer = self.get_serializer(lesson)
-        return Response(serializer.data)
+        lesson_serializer = self.get_serializer(lesson)
+
+        exam = getattr(lesson, "exam", None)
+
+        exam_data = None
+
+        if exam and exam.is_published:
+
+            exam_data = ExamSerializer(
+                exam
+            ).data
+
+            exam_passed = ExamAttempt.objects.filter(
+                student=request.user,
+                exam=exam,
+                passed=True,
+            ).exists()
+
+            
+
+        return Response({
+            "lesson": lesson_serializer.data,
+            "exam": exam_data,
+            "exam_passed": exam_passed,
+
+        })
 
 class EnrollCourseView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -207,23 +287,7 @@ class SubmitExamView(generics.GenericAPIView):
             )
 
         # Must complete lesson first
-        progress = LessonProgress.objects.filter(
-            student=request.user,
-            lesson=exam.lesson,
-            lesson_completed=True,
-        ).first()
-
-        if not progress:
-
-            return Response(
-                {
-                    "detail": (
-                        "Complete the lesson "
-                        "before taking the exam."
-                    )
-                },
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        
 
         answers = request.data.get(
             "answers",
@@ -664,10 +728,7 @@ class ExamDetailView(generics.RetrieveAPIView):
         IsAuthenticated
     ]
 
-
-class StudentExamAnalysisView(
-    generics.GenericAPIView
-):
+class StudentExamAnalysisView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, attempt_id):
@@ -682,31 +743,35 @@ class StudentExamAnalysisView(
             student=request.user,
         )
 
-        total_questions = attempt.exam.questions.count()
+        exam = attempt.exam
 
-        correct_answers = (
-            attempt.answers
-            .filter(is_correct=True)
-            .count()
-        )
+        questions = exam.questions.all()
 
-        wrong_answers = (
-            attempt.answers
-            .filter(is_correct=False)
-            .count()
-        )
+        total_questions = questions.count()
 
-        answers = (
-            attempt.answers
-            .select_related("question")
-            .filter(is_correct=False)
-        )
+        correct_count = attempt.answers.filter(
+            is_correct=True
+        ).count()
 
-        wrong_answers = []
+        wrong_count = attempt.answers.filter(
+            is_correct=False
+        ).count()
 
-        for answer in answers:
+        # -----------------------------------------
+        # QUESTIONS ANALYSIS
+        # -----------------------------------------
 
-            question = answer.question
+        questions_data = []
+
+        for question in questions:
+
+            try:
+                answer = attempt.answers.get(
+                    question=question
+                )
+            except ExamAttemptAnswer.DoesNotExist:
+                answer = None
+
             question_image = None
 
             if question.question_image:
@@ -714,69 +779,87 @@ class StudentExamAnalysisView(
                     question.question_image.url
                 )
 
-            wrong_answers.append(
+            questions_data.append(
                 {
-                    "question_id": question.id,
+                    "id": question.id,
 
                     "order": question.order,
 
                     "question": question.question,
 
+                    "question_image": question_image,
+
+                    "options": {
+                        "A": question.option_a,
+                        "B": question.option_b,
+                        "C": question.option_c,
+                        "D": question.option_d,
+                    },
+
                     "selected_answer": (
                         answer.selected_answer
+                        if answer
+                        else None
                     ),
 
                     "correct_answer": (
                         question.correct_answer
                     ),
 
-                    "option_a": question.option_a,
+                    "is_correct": (
+                        answer.is_correct
+                        if answer
+                        else False
+                    ),
 
-                    "option_b": question.option_b,
-
-                    "option_c": question.option_c,
-
-                    "option_d": question.option_d,
+                    "explanation": (
+                        question.explanation
+                        or ""
+                    ),
                 }
             )
+
+        # -----------------------------------------
+        # RESPONSE
+        # -----------------------------------------
 
         return Response(
             {
                 "attempt_id": attempt.id,
 
-                "exam_id": attempt.exam.id,
+                "exam_id": exam.id,
 
-                "exam_title": attempt.exam.title,
+                "exam_title": exam.title,
 
                 "lesson_title": (
-                    attempt.exam.lesson.title
+                    exam.lesson.title
                 ),
 
                 "course_title": (
-                    attempt.exam.lesson.course.title
+                    exam.lesson.course.title
                 ),
 
                 "score": attempt.score,
 
-                "passing_score": (
-                    attempt.exam.passing_score
-                ),
+                "passing_score": exam.passing_score,
 
                 "passed": attempt.passed,
-                
+
                 "total_questions": total_questions,
-                "correct_answers": correct_answers,
 
-                "wrong_answers": wrong_answers,
+                "correct_answers": correct_count,
 
-                "wrong_count": len(wrong_answers),
+                "wrong_answers": wrong_count,
 
                 "completed_at": (
                     attempt.completed_at
                 ),
+
+                "time_limit": exam.time_limit,
+
+                "questions": questions_data,
             }
         )
-
 
 class TeacherCourseListCreateView(
     generics.ListCreateAPIView
@@ -2007,6 +2090,9 @@ class TeacherLessonVideoUploadView(
     generics.GenericAPIView
 ):
 
+
+
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request, lesson_id):
@@ -2071,4 +2157,596 @@ class TeacherLessonVideoUploadView(
                 "upload": upload_data,
             },
             status=status.HTTP_201_CREATED,
+        )
+
+
+
+
+class StudentTodoListView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        todos = TodoItem.objects.filter(
+            user=request.user
+        ).order_by("is_completed", "-created_at")
+
+        data = []
+
+        for todo in todos:
+            data.append({
+                "id": todo.id,
+                "title": todo.title,
+                "description": todo.description,
+                "due_date": todo.due_date,
+                "priority": todo.priority,
+                "is_completed": todo.is_completed,
+                "created_at": todo.created_at,
+            })
+
+        return Response({
+            "todos": data
+        })
+
+        
+    def post(self, request):
+        todo = TodoItem.objects.create(
+            user=request.user,
+            title=request.data.get("title"),
+            description=request.data.get("description", ""),
+            due_date=request.data.get("due_date"),
+            priority=request.data.get("priority", "MEDIUM"),
+        )
+
+        return Response({
+            "message": "Task created successfully",
+            "todo": {
+                "id": todo.id,
+                "title": todo.title,
+                "description": todo.description,
+                "due_date": todo.due_date,
+                "priority": todo.priority,
+                "is_completed": todo.is_completed,
+                "created_at": todo.created_at,
+            }
+        }, status=201)
+
+
+        
+
+
+class StudentTodoDetailView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, request, pk):
+        return TodoItem.objects.filter(
+            id=pk,
+            user=request.user
+        ).first()
+
+    def patch(self, request, pk):
+        todo = self.get_object(request, pk)
+
+        if not todo:
+            return Response(
+                {"error": "Task not found"},
+                status=404
+            )
+
+        if "title" in request.data:
+            todo.title = request.data["title"]
+
+        if "description" in request.data:
+            todo.description = request.data["description"]
+
+        if "due_date" in request.data:
+            todo.due_date = request.data["due_date"]
+
+        if "priority" in request.data:
+            todo.priority = request.data["priority"]
+
+        if "is_completed" in request.data:
+            todo.is_completed = request.data["is_completed"]
+
+        todo.save()
+
+        return Response({
+            "message": "Task updated successfully",
+            "todo": {
+                "id": todo.id,
+                "title": todo.title,
+                "description": todo.description,
+                "due_date": todo.due_date,
+                "priority": todo.priority,
+                "is_completed": todo.is_completed,
+                "created_at": todo.created_at,
+            }
+        })
+
+    def delete(self, request, pk):
+        todo = self.get_object(request, pk)
+
+        if not todo:
+            return Response(
+                {"error": "Task not found"},
+                status=404
+            )
+
+        todo.delete()
+
+        return Response(
+            {"message": "Task deleted successfully"},
+            status=204
+        )
+
+
+
+class StudentTeacherNewsView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        news = TeacherNews.objects.filter(
+            is_published=True,
+            course__isnull=True
+        ).select_related(
+            "teacher"
+        ).order_by("-created_at")
+
+        data = []
+
+        for item in news:
+            data.append({
+                "id": item.id,
+                "title": item.title,
+                "content": item.content,
+                "teacher": item.teacher.username,
+                "created_at": item.created_at,
+            })
+
+        return Response({
+            "news": data
+        })
+
+
+
+class StudentLiveLessonsView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        now = timezone.localtime()
+        today = now.date()
+
+        live_lessons = (
+            LiveLesson.objects
+            .filter(
+                course__enrollments__student=request.user,
+                is_published=True,
+                start_time__date=today,
+            )
+            .select_related(
+                "course",
+                "teacher",
+            )
+            .order_by("start_time")
+            .distinct()
+        )
+
+        data = []
+
+        for lesson in live_lessons:
+
+            start_time = timezone.localtime(lesson.start_time)
+
+            end_time = start_time + timezone.timedelta(
+                minutes=lesson.duration_minutes
+            )
+
+            is_live = start_time <= now <= end_time
+
+            data.append({
+                "id": lesson.id,
+                "title": lesson.title,
+                "description": lesson.description,
+
+                "course_id": lesson.course.id,
+                "course_title": lesson.course.title,
+
+                "teacher_id": lesson.teacher.id,
+                "teacher_name": lesson.teacher.username,
+
+                "start_time": start_time,
+                "duration_minutes": lesson.duration_minutes,
+
+                "meeting_url": lesson.meeting_url,
+
+                "is_published": lesson.is_published,
+
+                "status": "live" if is_live else "scheduled",
+            })
+
+        return Response({
+            "today_count": len(data),
+            "live_lessons": data,
+        })
+
+
+class StudentRecommendedCoursesView(generics.GenericAPIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        student = request.user
+
+        enrolled_course_ids = Enrollment.objects.filter(
+            student=student
+        ).values_list("course_id", flat=True)
+
+        courses = Course.objects.filter(
+            is_published=True,
+            academic_year=student.academic_year,
+        ).exclude(
+            id__in=enrolled_course_ids
+        ).select_related(
+            "teacher"
+        )
+
+        data = []
+
+        for course in courses:
+
+            data.append({
+                "id": course.id,
+                "title": course.title,
+                "description": course.description,
+                "price": course.price,
+                "category": course.category,
+                "academic_year": course.academic_year,
+
+                "teacher": {
+                    "id": course.teacher.id if course.teacher else None,
+                    "username": (
+                        course.teacher.username
+                        if course.teacher
+                        else None
+                    ),
+                },
+
+                "thumbnail": (
+                    request.build_absolute_uri(
+                        course.thumbnail.url
+                    )
+                    if course.thumbnail
+                    else None
+                ),
+
+                "is_enrolled": False,
+            })
+
+        return Response({
+            "courses": data
+        })
+
+
+class StudentNotificationsView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        notifications = TeacherNews.objects.filter(
+            is_published=True,
+            course__isnull=False,
+            course__enrollments__student=request.user,
+        ).select_related(
+            "teacher",
+            "course",
+        ).order_by("-created_at").distinct()
+
+        data = []
+
+        for item in notifications:
+            data.append({
+                "id": item.id,
+                "title": item.title,
+                "content": item.content,
+                "teacher": item.teacher.username,
+                "course_id": item.course.id,
+                "course_title": item.course.title,
+                "created_at": item.created_at,
+            })
+
+        return Response({
+            "notifications": data
+        })
+
+
+
+
+
+
+class StudentLearningStatsView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        student = request.user
+        today = timezone.localdate()
+
+        # ==========================================
+        # Enrolled Courses
+        # ==========================================
+
+        enrolled_courses = Enrollment.objects.filter(
+            student=student
+        )
+
+        total_courses = enrolled_courses.count()
+
+        # ==========================================
+        # Lessons
+        # ==========================================
+
+        total_lessons = Lesson.objects.filter(
+            course__enrollments__student=student,
+            is_published=True,
+        ).distinct().count()
+
+        completed_lessons = LessonProgress.objects.filter(
+            student=student,
+            lesson__course__enrollments__student=student,
+            lesson__is_published=True,
+            lesson_completed=True,
+        ).distinct().count()
+
+        # ==========================================
+        # Overall Progress
+        # ==========================================
+
+        if total_lessons > 0:
+            overall_progress = round(
+                (completed_lessons / total_lessons) * 100
+            )
+        else:
+            overall_progress = 0
+
+        # ==========================================
+        # Active Courses
+        #
+        # Courses that have at least one completed
+        # lesson OR at least one progress record.
+        # ==========================================
+
+        active_courses = enrolled_courses.filter(
+            course__lessons__student_progress__student=student
+        ).distinct().count()
+
+        # ==========================================
+        # Exams
+        # ==========================================
+
+        exam_attempts = ExamAttempt.objects.filter(
+            student=student
+        )
+
+        total_exam_attempts = exam_attempts.count()
+
+        passed_exams = exam_attempts.filter(
+            passed=True
+        ).count()
+
+        # ==========================================
+        # Learning Streak
+        # ==========================================
+
+        completed_dates = (
+            LessonProgress.objects
+            .filter(
+                student=student,
+                lesson_completed=True,
+                completed_at__isnull=False,
+            )
+            .values_list(
+                "completed_at",
+                flat=True,
+            )
+            .order_by("-completed_at")
+        )
+
+        dates = set()
+
+        for completed_at in completed_dates:
+            local_date = timezone.localtime(
+                completed_at
+            ).date()
+
+            dates.add(local_date)
+
+        streak = 0
+        current_date = today
+
+        while current_date in dates:
+            streak += 1
+            current_date -= timedelta(days=1)
+
+        # ==========================================
+        # Response
+        # ==========================================
+
+        return Response({
+
+            "streak_days": streak,
+
+            "courses": {
+                "total": total_courses,
+                "active": active_courses,
+            },
+
+            "lessons": {
+                "total": total_lessons,
+                "completed": completed_lessons,
+            },
+
+            "progress": {
+                "overall_percentage": overall_progress,
+            },
+
+            "exams": {
+                "total_attempts": total_exam_attempts,
+                "passed": passed_exams,
+            },
+
+        })
+
+
+
+
+class TestStorageUploadView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        file = request.FILES.get("file")
+
+        if not file:
+            return Response(
+                {
+                    "detail": "No file uploaded."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        result = upload_file(
+            file,
+            folder="test",
+        )
+
+        return Response(
+            {
+                "message": "File uploaded successfully.",
+                "path": result["path"],
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+class SubmitAssignmentView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, lesson_id):
+
+        lesson = get_object_or_404(
+            Lesson,
+            id=lesson_id,
+            is_published=True,
+        )
+
+        # Student must be enrolled
+        if not Enrollment.objects.filter(
+            student=request.user,
+            course=lesson.course,
+        ).exists():
+            return Response(
+                {
+                    "detail": "You are not enrolled in this course."
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        # Lesson must have started / video completed
+        progress = LessonProgress.objects.filter(
+            student=request.user,
+            lesson=lesson,
+        ).first()
+
+        if not progress or not progress.video_completed:
+            return Response(
+                {
+                    "detail": "Complete the lesson video first."
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        file = request.FILES.get("file")
+
+        if not file:
+            return Response(
+                {
+                    "detail": "No assignment file uploaded."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Only PDF
+        if file.content_type != "application/pdf":
+            return Response(
+                {
+                    "detail": "Only PDF files are allowed."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Upload to Supabase Storage
+        result = upload_file(
+            file,
+            folder=f"assignments/{request.user.id}/{lesson.id}",
+        )
+
+        # Save only the Supabase path in DB
+        submission, created = AssignmentSubmission.objects.update_or_create(
+            student=request.user,
+            lesson=lesson,
+            defaults={
+                "file_path": result["path"],
+            },
+        )
+
+        return Response(
+            {
+                "message": "Assignment submitted successfully.",
+                "submission_id": submission.id,
+                "file_path": submission.file_path,
+                "submitted_at": submission.submitted_at,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class LessonQuestionListCreateView(
+    generics.ListCreateAPIView
+):
+
+    serializer_class = LessonQuestionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+
+        lesson_id = self.kwargs["lesson_id"]
+
+        return LessonQuestion.objects.filter(
+            lesson_id=lesson_id,
+            lesson__is_published=True,
+        ).select_related(
+            "student"
+        )
+
+    def perform_create(self, serializer):
+
+        lesson = get_object_or_404(
+            Lesson,
+            id=self.kwargs["lesson_id"],
+            is_published=True,
+        )
+
+        # لازم الطالب يكون enrolled
+        if not Enrollment.objects.filter(
+            student=self.request.user,
+            course=lesson.course,
+        ).exists():
+
+            raise PermissionDenied(
+                "You are not enrolled in this course."
+            )
+
+        serializer.save(
+            lesson=lesson,
+            student=self.request.user,
         )

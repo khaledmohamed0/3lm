@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/auth/Login";
 
 import StudentDashboard from "./pages/student/StudentDashboard";
+import CourseDetails from "./pages/student/CourseDetails";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminStudents from "./pages/admin/AdminStudents";
@@ -12,7 +13,7 @@ import DashboardRedirect from "./pages/DashboardRedirect";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import RoleRoute from "./routes/RoleRoute";
 import ExamAnalysis from "./pages/student/ExamAnalysis";
-import CourseDetails from "./pages/student/CourseDetails";
+
 import LessonDetails from "./pages/student/LessonDetails";
 import Exam from "./pages/student/Exam";
 import Signup from "./pages/auth/Signup";
@@ -32,6 +33,7 @@ import AdminCourses from "./pages/admin/AdminCourses";
 import AllCourses from "./pages/student/AllCourses";
 import TeacherCourseStudents from "./pages/teacher/TeacherCourseStudents";
 import TeacherLayout from "./layouts/TeacherLayout";
+import LessonPage from "./routes/LessonPage";
 
 
 function App() {
@@ -80,22 +82,20 @@ function App() {
             </RoleRoute>
           }
         />
-        <Route
+       <Route
           path="/student/courses/:courseId/lessons/:lessonId"
           element={
             <RoleRoute allowedRoles={["STUDENT"]}>
-              <LessonDetails />
+              <LessonPage />
             </RoleRoute>
           }
         />
 
+       
+
         <Route
-          path="/student/courses/:courseId"
-          element={
-            <RoleRoute allowedRoles={["STUDENT"]}>
-              <CourseDetails />
-            </RoleRoute>
-          }
+          path="/student/courses/:id"
+          element={<CourseDetails/>}
         />
 
         <Route

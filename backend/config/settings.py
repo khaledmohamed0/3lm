@@ -19,7 +19,7 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = "mlW5cqpNce401PggNreUWGUGZFrD_A-Ab43gy4z2oxspSdVJ5fB_KP3UJezKO_bg568"
 BUNNY_LIBRARY_ID = os.getenv("BUNNY_LIBRARY_ID")
 BUNNY_API_KEY = os.getenv("BUNNY_API_KEY")
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -142,11 +142,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Africa/Cairo"
+USE_TZ = True
 
 USE_I18N = True
 
-USE_TZ = True
+
 
 
 # =========================================================
@@ -222,18 +223,3 @@ CSRF_TRUSTED_ORIGINS = [
 # PRODUCTION SECURITY
 # =========================================================
 
-if not DEBUG:
-
-    SECURE_SSL_REDIRECT = True
-
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
-    SECURE_PROXY_SSL_HEADER = (
-        "HTTP_X_FORWARDED_PROTO",
-        "https",
-    )

@@ -8,12 +8,25 @@ from .models import (
     Exam,
     ExamAttempt,
     ExamQuestion,
+    LessonQuestion,
 )
 
 class LessonSerializer(serializers.ModelSerializer):
 
     exam_id = serializers.IntegerField(
         source="exam.id",
+        read_only=True,
+        allow_null=True,
+    )
+
+    lesson_pdf = serializers.URLField(
+        source="lesson_pdf_url",
+        read_only=True,
+        allow_null=True,
+    )
+
+    assignment_pdf = serializers.URLField(
+        source="assignment_pdf_url",
         read_only=True,
         allow_null=True,
     )
@@ -26,10 +39,14 @@ class LessonSerializer(serializers.ModelSerializer):
             "course",
             "title",
             "description",
+
             "video_url",
             "bunny_video_id",
+            "bunny_solution_video_id",
+
             "lesson_pdf",
             "assignment_pdf",
+
             "order",
             "is_published",
             "exam_id",
@@ -37,11 +54,27 @@ class LessonSerializer(serializers.ModelSerializer):
 
         read_only_fields = [
             "bunny_video_id",
+            "bunny_solution_video_id",
+            "lesson_pdf",
+            "assignment_pdf",
         ]
 
 
 class CourseSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
+
+    teacher_name = serializers.SerializerMethodField()
+    is_enrolled = serializers.SerializerMethodField()
+
+    category_display = serializers.CharField(
+        source="get_category_display",
+        read_only=True
+    )
+
+    academic_year_display = serializers.CharField(
+        source="get_academic_year_display",
+        read_only=True
+    )
 
     class Meta:
         model = Course
@@ -51,12 +84,32 @@ class CourseSerializer(serializers.ModelSerializer):
             "description",
             "thumbnail",
             "price",
+            "category",
+            "category_display",
+            "academic_year",
+            "academic_year_display",
+            "teacher_name",
             "is_published",
             "lessons",
             "created_at",
             "updated_at",
+            "is_enrolled",
         ]
 
+    def get_is_enrolled(self, obj):
+        request = self.context.get("request")
+
+        if not request or not request.user.is_authenticated:
+            return False
+
+        return obj.enrollments.filter(
+            student=request.user
+        ).exists()
+
+    def get_teacher_name(self, obj):
+        if obj.teacher:
+            return obj.teacher.get_full_name() or obj.teacher.username
+        return "مدرس المنصة"
 
 
 
@@ -207,3 +260,38 @@ class TeacherCourseSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+
+class LessonQuestionSerializer(serializers.ModelSerializer):
+
+    student_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = LessonQuestion
+
+        fields = [
+            "id",
+            "lesson",
+            "student",
+            "student_name",
+            "question",
+            "answer",
+            "created_at",
+            "updated_at",
+        ]
+
+        read_only_fields = [
+            "id",
+            "lesson",
+            "student",
+            "student_name",
+            "answer",
+            "created_at",
+            "updated_at",
+        ]
+
+    def get_student_name(self, obj):
+        return (
+            obj.student.get_full_name()
+            or obj.student.username
+        )

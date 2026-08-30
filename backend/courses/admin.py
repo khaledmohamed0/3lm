@@ -10,6 +10,9 @@ from .models import (
     Wallet,
     WalletTransaction,
     ExamQuestion,
+    TodoItem,
+    TeacherNews,
+    LiveLesson,
 )
 
 @admin.register(Course)
@@ -208,3 +211,10 @@ class ExamQuestionAdmin(admin.ModelAdmin):
         "exam",
         "order",
     )
+
+
+
+
+admin.site.register(TodoItem)
+admin.site.register(TeacherNews)
+admin.site.register(LiveLesson)
