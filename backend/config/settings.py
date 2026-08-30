@@ -19,7 +19,7 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = "mlW5cqpNce401PggNreUWGUGZFrD_A-Ab43gy4z2oxspSdVJ5fB_KP3UJezKO_bg568"
 BUNNY_LIBRARY_ID = os.getenv("BUNNY_LIBRARY_ID")
 BUNNY_API_KEY = os.getenv("BUNNY_API_KEY")
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "localhost",
