@@ -469,14 +469,16 @@ export default function LessonViewer({
   };
 
 
+  const BACKEND_URL = "https://loda2007.pythonanywhere.com";
+
   const getMediaUrl = (path) => {
-      if (!path) return null;
+    if (!path) return null;
 
-      if (path.startsWith("http")) {
-          return path;
-      }
+    if (path.startsWith("http")) {
+      return path;
+    }
 
-      return `http://127.0.0.1:8000${path}`;
+    return `${BACKEND_URL}${path}`;
   };
 
   // =========================================================

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: "https://loda2007.pythonanywhere.com/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -104,7 +104,7 @@ api.interceptors.response.use(
       // -------------------------------------------------
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/auth/token/refresh/",
+        "https://loda2007.pythonanywhere.com/api/auth/token/refresh/",
         {
           refresh: refreshToken,
         }
