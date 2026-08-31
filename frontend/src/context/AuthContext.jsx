@@ -93,11 +93,15 @@ export function AuthProvider({ children }) {
   // =========================================================
   const signup = async (payload) => {
     try {
-      const response = await api.post("/auth/signup/", payload);
+      const response = await api.post(
+        "/auth/register/",
+        payload
+      );
 
       console.log("Signup response:", response.data);
 
       return response.data;
+
     } catch (error) {
       console.error("Signup failed:", error);
       throw error;
