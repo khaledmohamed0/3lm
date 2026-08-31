@@ -89,6 +89,22 @@ export function AuthProvider({ children }) {
   };
 
   // =========================================================
+  // SIGNUP
+  // =========================================================
+  const signup = async (payload) => {
+    try {
+      const response = await api.post("/auth/signup/", payload);
+
+      console.log("Signup response:", response.data);
+
+      return response.data;
+    } catch (error) {
+      console.error("Signup failed:", error);
+      throw error;
+    }
+  };
+
+  // =========================================================
   // LOGOUT
   // =========================================================
   const logout = () => {
@@ -126,9 +142,8 @@ export function AuthProvider({ children }) {
         user,
         setUser,
         loading,
-
-        // Important
         login,
+        signup,
         logout,
         fetchUser,
       }}

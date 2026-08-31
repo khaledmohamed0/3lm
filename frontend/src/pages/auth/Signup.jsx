@@ -44,61 +44,67 @@ export default function Signup({ onNavigateToLogin }) {
   };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
+      e.preventDefault();
+      setError("");
+      setLoading(true);
 
-        const payload = {
-            username: formData.username.trim(),
-            fullName: formData.fullName.trim(),
-            email: formData.email.trim(),
-            phone: formData.phone.trim(),
-            password: formData.password,
-            role: userRole,
-            gradeLevel:
-            userRole === "student"
-                ? formData.gradeLevel
-                : null,
+      const payload = {
+        username: formData.username.trim(),
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
 
-            academicYear:
-              userRole === "student"
-                ? formData.academicYear
-                : null,
-        };
+        password: formData.password,
 
-        console.log("========== SIGNUP ==========");
-        console.log("Username:", payload.username);
-        console.log("Full Name:", payload.fullName);
-        console.log("Email:", payload.email);
-        console.log("Phone:", payload.phone);
-        console.log("Role:", payload.role);
-        console.log("Grade:", payload.gradeLevel);
-        console.log("Academic Year:", payload.academicYear);
-        console.log("============================");
+        role: userRole,
 
-        try {
-            
-            await signup(payload);
+        gradeLevel:
+          userRole === "student"
+            ? formData.gradeLevel
+            : null,
 
-            navigate("/login");
-       
-        } catch (error) {
-            console.error(
-            "Signup Error:",
-            error.response?.data || error
-            );
+        academicYear:
+          userRole === "student"
+            ? formData.academicYear
+            : null,
+      };
 
-            const data = error.response?.data;
+      console.log("========== SIGNUP ==========");
+      console.log("Username:", payload.username);
+      console.log("Full Name:", payload.fullName);
+      console.log("Email:", payload.email);
+      console.log("Phone:", payload.phone);
+      console.log("Role:", payload.role);
+      console.log("Grade:", payload.gradeLevel);
+      console.log("Academic Year:", payload.academicYear);
+      console.log("============================");
 
-            if (data) {
-            setError(
-                Object.values(data)
-                .flat()
-                .join(" ")
-            );
-            } else {
-            setError("حدث خطأ أثناء إنشاء الحساب.");
-            }
+      try {
+        await signup(payload);
+
+        navigate("/login");
+
+      } catch (error) {
+        console.error(
+          "Signup Error:",
+          error.response?.data || error
+        );
+
+        const data = error.response?.data;
+
+        if (data) {
+          setError(
+            Object.values(data)
+              .flat()
+              .join(" ")
+          );
+        } else {
+          setError("حدث خطأ أثناء إنشاء الحساب.");
         }
+
+      } finally {
+        setLoading(false);
+      }
     };
 
   return (
