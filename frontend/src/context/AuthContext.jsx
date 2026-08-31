@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { Loader2 } from "lucide-react"; // 👈 استيراد الـ Spinner
 
 import api from "../api/axios";
 
@@ -47,22 +48,6 @@ export function AuthProvider({ children }) {
       });
 
       console.log("Login response:", response.data);
-
-      /*
-        Expected response from Django:
-
-        {
-          "access": "...",
-          "refresh": "..."
-        }
-
-        OR:
-
-        {
-          "access_token": "...",
-          "refresh_token": "..."
-        }
-      */
 
       const accessToken =
         response.data.access ||
@@ -148,7 +133,13 @@ export function AuthProvider({ children }) {
         fetchUser,
       }}
     >
-      {children}
+      {loading ? (
+        <div className="min-h-screen bg-[#F7F6F2] flex items-center justify-center">
+          <Loader2 className="w-10 h-10 text-[#00406E] animate-spin" />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 }
